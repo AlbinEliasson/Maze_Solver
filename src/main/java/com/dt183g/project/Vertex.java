@@ -1,8 +1,8 @@
 package com.dt183g.project;
 
 public class Vertex {
-    private final int xCoordinate;
-    private final int yCoordinate;
+    private int xCoordinate;
+    private int yCoordinate;
 
     public Vertex(int x, int y) {
         this.xCoordinate = x;
@@ -13,7 +13,15 @@ public class Vertex {
         return xCoordinate;
     }
 
+    public void setXCoordinate(int x) {
+        xCoordinate = x;
+    }
+
     public int getYCoordinate() {
         return yCoordinate;
+    }
+
+    public void setYCoordinate(int y) {
+        yCoordinate = y;
     }
 }
