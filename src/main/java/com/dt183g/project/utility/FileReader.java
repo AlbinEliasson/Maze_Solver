@@ -24,7 +24,7 @@ public class FileReader {
             }
         }
 
-        return removeColorThreshold(mazeImage);
+        return mazeImage;
     }
 
     private BufferedImage removeColorThreshold(BufferedImage mazeImage) {
@@ -41,6 +41,7 @@ public class FileReader {
     }
 
     public int[][] getMatrixFromImage(BufferedImage mazeImage) {
+        mazeImage = removeColorThreshold(mazeImage);
         int[][] mazeMatrix;
         mazeMatrix = new int[mazeImage.getHeight()][mazeImage.getWidth()];
 
