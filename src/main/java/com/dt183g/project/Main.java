@@ -1,7 +1,9 @@
 package com.dt183g.project;
 
+import com.dt183g.project.mvc.views.MazeView;
 import com.dt183g.project.utility.FileReader;
 
+import javax.swing.SwingUtilities;
 import java.awt.image.BufferedImage;
 
 public class Main {
@@ -11,12 +13,12 @@ public class Main {
 
         FileReader fileReader = new FileReader();
         BufferedImage mazeImage = fileReader.readMazeImage("med7.jpg");
-        MazeWindow window = new MazeWindow(mazeImage);
+        SwingUtilities.invokeLater(() -> new MazeView(mazeImage));
 
 
 //        int[][] test = fileReader.getMatrixFromImage(mazeImage);
-//        //System.out.println(test.length);
-//
+        //System.out.println(test.length);
+
 //        for (int i = 0; i < test.length; i++) {
 //            for (int j = 0; j < test[i].length; j++) {
 ////                if (test[i][j] == 1) {

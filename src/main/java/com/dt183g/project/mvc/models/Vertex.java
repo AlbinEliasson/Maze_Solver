@@ -1,4 +1,4 @@
-package com.dt183g.project;
+package com.dt183g.project.mvc.models;
 
 public class Vertex {
     private int xCoordinate;
