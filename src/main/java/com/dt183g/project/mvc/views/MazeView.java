@@ -85,9 +85,7 @@ public class MazeView extends JPanel {
     }
 
     private void addResetButtonListener(JButton resetButton) {
-        resetButton.addActionListener(e -> {
-            mazePanel.resetImage();
-        });
+        resetButton.addActionListener(e -> mazePanel.resetImage());
     }
 
     private void initializeMenuButton(JButton menuButton) {

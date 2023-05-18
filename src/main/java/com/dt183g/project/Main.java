@@ -1,19 +1,15 @@
 package com.dt183g.project;
 
-import com.dt183g.project.mvc.views.MazeView;
-import com.dt183g.project.utility.FileReader;
+import com.dt183g.project.mvc.controllers.MazeController;
 
 import javax.swing.SwingUtilities;
-import java.awt.image.BufferedImage;
 
 public class Main {
 
     public static void main(String... args) {
         System.out.println("Maze!");
 
-        FileReader fileReader = new FileReader();
-        BufferedImage mazeImage = fileReader.readMazeImage("med7.jpg");
-        SwingUtilities.invokeLater(() -> new MazeView(mazeImage));
+        SwingUtilities.invokeLater(MazeController::new);
 
 
 //        int[][] test = fileReader.getMatrixFromImage(mazeImage);
