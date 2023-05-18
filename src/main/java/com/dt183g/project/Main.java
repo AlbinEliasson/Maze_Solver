@@ -13,6 +13,7 @@ public class Main {
         BufferedImage mazeImage = fileReader.readMazeImage("med7.jpg");
         MazeWindow window = new MazeWindow(mazeImage);
 
+
 //        int[][] test = fileReader.getMatrixFromImage(mazeImage);
 //        //System.out.println(test.length);
 //
