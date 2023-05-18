@@ -6,8 +6,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -24,17 +22,6 @@ public class Maze extends JPanel {
 
         this.setPreferredSize(new Dimension(mazeImage.getWidth(), mazeImage.getHeight()));
         this.setBackground(new Color(164, 164, 164));
-
-        addImageClickListener();
-    }
-
-    private void addImageClickListener() {
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(final MouseEvent mouseEvent) {
-                setClickedPosition(mouseEvent.getX(), mouseEvent.getY());
-            }
-        });
     }
 
     public void setClickedPosition(int x, int y) {
@@ -81,6 +68,18 @@ public class Maze extends JPanel {
         endPosition = null;
         mazePath.clear();
         this.repaint();
+    }
+
+    public boolean isPositionsSet() {
+        return startPosition != null && endPosition != null;
+    }
+
+    public Point getStartPosition() {
+        return startPosition;
+    }
+
+    public Point getEndPosition() {
+        return endPosition;
     }
 
     public boolean isSelectStart() {

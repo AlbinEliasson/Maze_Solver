@@ -1,5 +1,6 @@
 package com.dt183g.project.mvc.views;
 
+import com.dt183g.project.mvc.controllers.MazeController;
 import com.dt183g.project.mvc.views.gui.Maze;
 
 import javax.swing.BorderFactory;
@@ -10,19 +11,25 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class MazeView extends JPanel {
+public class MazeView {
     private JFrame windowFrame;
     private JPanel windowPanel;
     private JPanel menuPanel;
     private JButton setStartButton;
     private JButton setEndButton;
     private JButton resetButton;
+    private JButton solveButton;
     private Maze mazePanel;
+    private final MazeController mazeController;
 
-    public MazeView(BufferedImage mazeImage) {
+    public MazeView(BufferedImage mazeImage, MazeController controller) {
         this.mazePanel = new Maze(mazeImage);
+        this.mazeController = controller;
+        addMazeClickListener();
         initializeWindow();
     }
 
@@ -65,15 +72,22 @@ public class MazeView extends JPanel {
         initializeMenuButton(resetButton);
         addResetButtonListener(resetButton);
 
+        solveButton = new JButton(" Solve ");
+        disableSolveButton();
+        initializeMenuButton(solveButton);
+        addSolveButtonListener(solveButton);
+
         menuPanel.add(setStartButton);
         menuPanel.add(setEndButton);
         menuPanel.add(resetButton);
+        menuPanel.add(solveButton);
     }
 
     private void addSetStartButtonListener(JButton setStartButton) {
         setStartButton.addActionListener(e -> {
             mazePanel.setSelectCursor();
             mazePanel.setSelectStart(true);
+            mazePanel.setSelectEnd(false);
         });
     }
 
@@ -81,11 +95,42 @@ public class MazeView extends JPanel {
         setEndButton.addActionListener(e -> {
             mazePanel.setSelectCursor();
             mazePanel.setSelectEnd(true);
+            mazePanel.setSelectStart(false);
         });
     }
 
     private void addResetButtonListener(JButton resetButton) {
-        resetButton.addActionListener(e -> mazePanel.resetImage());
+        resetButton.addActionListener(e -> {
+            mazePanel.resetImage();
+            disableSolveButton();
+        });
+    }
+
+    private void addSolveButtonListener(JButton solveButton) {
+        solveButton.addActionListener(e -> {
+            mazeController.solveMaze(mazePanel.getStartPosition(), mazePanel.getEndPosition());
+        });
+    }
+
+    private void addMazeClickListener() {
+        mazePanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(final MouseEvent mouseEvent) {
+                mazePanel.setClickedPosition(mouseEvent.getX(), mouseEvent.getY());
+
+                if (mazePanel.isPositionsSet()) {
+                    enableSolveButton();
+                }
+            }
+        });
+    }
+
+    public void enableSolveButton() {
+        solveButton.setEnabled(true);
+    }
+
+    public void disableSolveButton() {
+        solveButton.setEnabled(false);
     }
 
     private void initializeMenuButton(JButton menuButton) {
