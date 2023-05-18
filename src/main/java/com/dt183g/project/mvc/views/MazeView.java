@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -23,7 +24,7 @@ public class MazeView {
     private JButton setEndButton;
     private JButton resetButton;
     private JButton solveButton;
-    private Maze mazePanel;
+    private final Maze mazePanel;
     private final MazeController mazeController;
 
     public MazeView(BufferedImage mazeImage, MazeController controller) {
@@ -138,5 +139,10 @@ public class MazeView {
         menuButton.setBackground(Color.LIGHT_GRAY);
         menuButton.setFont(new Font("Monaco", Font.BOLD, (int) (mazePanel.getMazeImageWidth() * 0.03)));
         menuButton.setVisible(true);
+    }
+
+    public void displayMazePath(Point position) {
+        mazePanel.setMazePath(position);
+        mazePanel.repaint();
     }
 }

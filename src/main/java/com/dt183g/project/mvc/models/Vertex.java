@@ -5,7 +5,7 @@ public class Vertex {
     private int yCoordinate;
 
     public Vertex(int x, int y) {
-        // TODO Dont know if we need this class, if not delete
+        // TODO Don't know if we need this class, if not delete
         this.xCoordinate = x;
         this.yCoordinate = y;
     }

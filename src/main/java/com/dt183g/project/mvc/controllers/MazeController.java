@@ -7,9 +7,9 @@ import com.dt183g.project.utility.FileReader;
 import java.awt.Point;
 
 public class MazeController {
-    private FileReader fileReader;
-    private MazeModel mazeModel;
-    private MazeView mazeView;
+    private final FileReader fileReader;
+    private final MazeModel mazeModel;
+    private final MazeView mazeView;
 
     public MazeController() {
         //TODO Either utilize the controller directly for calling methods or use an observer pattern
@@ -21,6 +21,10 @@ public class MazeController {
     public void solveMaze(Point startPosition, Point endPosition) {
         System.out.printf("Start position X: %d Y: %d | End position X: %d Y: %d%n", startPosition.x, startPosition.y, endPosition.x, endPosition.y);
         mazeModel.solveMaze(startPosition, endPosition);
+    }
+
+    public void displayPath(Point position) {
+        mazeView.displayMazePath(position);
     }
 
 }
