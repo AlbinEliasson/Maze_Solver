@@ -13,11 +13,12 @@ import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 public class MazeView extends JPanel {
-    private JFrame window;
+    private JFrame windowFrame;
     private JPanel windowPanel;
     private JPanel menuPanel;
-    private JButton selectStartPosition;
-    private JButton selectEndPosition;
+    private JButton setStartButton;
+    private JButton setEndButton;
+    private JButton resetButton;
     private Maze mazePanel;
 
     public MazeView(BufferedImage mazeImage) {
@@ -28,14 +29,14 @@ public class MazeView extends JPanel {
     private void initializeWindow() {
         initializeMenuPanel();
         initializeWindowPanel();
-        window = new JFrame();
-        window.add(windowPanel);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.setTitle("Maze solver");
-        window.setVisible(true);
-        window.pack();
-        window.setLocationRelativeTo(null);
+        windowFrame = new JFrame();
+        windowFrame.add(windowPanel);
+        windowFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        windowFrame.setResizable(false);
+        windowFrame.setTitle("Maze solver");
+        windowFrame.setVisible(true);
+        windowFrame.pack();
+        windowFrame.setLocationRelativeTo(null);
     }
 
     private void initializeWindowPanel() {
@@ -52,29 +53,40 @@ public class MazeView extends JPanel {
         menuPanel.setBorder(BorderFactory.createBevelBorder(1, Color.GRAY, Color.WHITE));
         menuPanel.setPreferredSize(new Dimension(mazePanel.getMazeImageWidth(), (int) (mazePanel.getMazeImageHeight() * 0.1)));
 
-        selectStartPosition = new JButton(" Set start ");
-        initializeMenuButton(selectStartPosition);
-        addSetStartButtonListener(selectStartPosition);
+        setStartButton = new JButton(" Set start ");
+        initializeMenuButton(setStartButton);
+        addSetStartButtonListener(setStartButton);
 
-        selectEndPosition = new JButton(" Set end ");
-        initializeMenuButton(selectEndPosition);
-        addSetEndButtonListener(selectEndPosition);
+        setEndButton = new JButton(" Set end ");
+        initializeMenuButton(setEndButton);
+        addSetEndButtonListener(setEndButton);
 
-        menuPanel.add(selectStartPosition);
-        menuPanel.add(selectEndPosition);
+        resetButton = new JButton(" Reset ");
+        initializeMenuButton(resetButton);
+        addResetButtonListener(resetButton);
+
+        menuPanel.add(setStartButton);
+        menuPanel.add(setEndButton);
+        menuPanel.add(resetButton);
     }
 
-    private void addSetStartButtonListener(JButton selectStartPosition) {
-        selectStartPosition.addActionListener(e -> {
+    private void addSetStartButtonListener(JButton setStartButton) {
+        setStartButton.addActionListener(e -> {
             mazePanel.setSelectCursor();
             mazePanel.setSelectStart(true);
         });
     }
 
-    private void addSetEndButtonListener(JButton selectEndPosition) {
-        selectEndPosition.addActionListener(e -> {
+    private void addSetEndButtonListener(JButton setEndButton) {
+        setEndButton.addActionListener(e -> {
             mazePanel.setSelectCursor();
             mazePanel.setSelectEnd(true);
+        });
+    }
+
+    private void addResetButtonListener(JButton resetButton) {
+        resetButton.addActionListener(e -> {
+            mazePanel.resetImage();
         });
     }
 

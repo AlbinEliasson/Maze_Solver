@@ -76,6 +76,13 @@ public class Maze extends JPanel {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
+    public void resetImage() {
+        startPosition = null;
+        endPosition = null;
+        mazePath.clear();
+        this.repaint();
+    }
+
     public boolean isSelectStart() {
         return selectStart;
     }
@@ -114,7 +121,7 @@ public class Maze extends JPanel {
             graphics.setColor(Color.GREEN);
             graphics.fillOval(endPosition.x, endPosition.y, 10, 10);
         }
-        if (mazePath != null) {
+        if (!mazePath.isEmpty()) {
             graphics.setColor(Color.RED);
             mazePath.forEach(point -> graphics.fillRect(point.x, point.y, 5, 5));
         }
