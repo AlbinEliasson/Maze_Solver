@@ -1,5 +1,6 @@
 package com.dt183g.project.mvc.controllers;
 
+import com.dt183g.project.mvc.models.DijkstrasAlgorithm;
 import com.dt183g.project.mvc.models.MazeModel;
 import com.dt183g.project.mvc.views.MazeView;
 import com.dt183g.project.utility.FileReader;
@@ -28,7 +29,11 @@ public class MazeController {
 
     public void solveMaze(Point startPosition, Point endPosition) {
         System.out.printf("Start position X: %d Y: %d | End position X: %d Y: %d%n", startPosition.x, startPosition.y, endPosition.x, endPosition.y);
-        mazeModel.solveMaze(startPosition, endPosition);
+        //mazeModel.solveMaze(startPosition, endPosition);
+
+        DijkstrasAlgorithm algorithm = new DijkstrasAlgorithm(this);
+        int test = algorithm.solveMaze(getMaze(), startPosition, endPosition);
+        System.out.println("Final length: " + test);
     }
 
     public void displayPath(Point position) {

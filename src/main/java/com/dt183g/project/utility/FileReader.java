@@ -49,7 +49,7 @@ public class FileReader {
 
          for (int i = 0; i < mazeImage.getHeight(); i++) {
             for (int j = 0; j < mazeImage.getWidth(); j++) {
-                mazeMatrix[i][j] = mazeImage.getRGB(j, i) == -1 ? 2 : 1;
+                mazeMatrix[i][j] = mazeImage.getRGB(j, i) == -1 ? 1 : 0;
             }
         }
         return mazeMatrix;

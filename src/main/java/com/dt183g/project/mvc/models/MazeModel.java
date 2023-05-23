@@ -139,7 +139,7 @@ public class MazeModel {
     }
 
     private boolean checkRight(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        if (currentXPos < getMazeColumns() - 1 && maze[currentYPos][currentXPos + 1] == 2) {
+        if (currentXPos < getMazeColumns() - 1 && maze[currentYPos][currentXPos + 1] == 1) {
             System.out.println("RIGHT!");
             previousMove = "right";
             move(currentXPos + 1, currentYPos, currentPos);
@@ -149,7 +149,7 @@ public class MazeModel {
     }
 
     private boolean checkLeft(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        if (currentXPos > 0 && maze[currentYPos][currentXPos - 1] == 2) {
+        if (currentXPos > 0 && maze[currentYPos][currentXPos - 1] == 1) {
             System.out.println("LEFT!");
             previousMove = "left";
             move(currentXPos - 1, currentYPos, currentPos);
@@ -159,7 +159,7 @@ public class MazeModel {
     }
 
     private boolean checkUp(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        if (currentYPos > 0 && maze[currentYPos - 1][currentXPos] == 2) {
+        if (currentYPos > 0 && maze[currentYPos - 1][currentXPos] == 1) {
             System.out.println("UP!");
             previousMove = "up";
             move(currentXPos, currentYPos - 1, currentPos);
@@ -169,7 +169,7 @@ public class MazeModel {
     }
 
     private boolean checkDown(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        if (currentYPos < getMazeRows() - 1 && maze[currentYPos + 1][currentXPos] == 2) {
+        if (currentYPos < getMazeRows() - 1 && maze[currentYPos + 1][currentXPos] == 1) {
             System.out.println("DOWN!");
             previousMove = "down";
             move(currentXPos, currentYPos + 1, currentPos);
@@ -183,9 +183,9 @@ public class MazeModel {
         //mazeController.displayPath(new Point(nextXPos * 10, nextYPos * 10));
         System.out.format("X: %d Y: %d%n", nextXPos, nextYPos);
 
-        if (mazePath[nextYPos][nextXPos] == 2) {
+        if (mazePath[nextYPos][nextXPos] == 1) {
             // Set the path to non-walkable
-            maze[currentPosition[0]][currentPosition[1]] = 8;
+            maze[currentPosition[0]][currentPosition[1]] = 2;
             // Remove the coordinates
             stack.pop();
 
@@ -193,7 +193,7 @@ public class MazeModel {
             mazeController.displayPath(new Point(nextXPos * 10, nextYPos * 10));
             //System.out.format("X: %d Y: %d%n", nextXPos, nextYPos);
             // Add the new path to the "empty" maze and push the coordinates to the stack
-            mazePath[nextYPos][nextXPos] = 2;
+            mazePath[nextYPos][nextXPos] = 1;
             stack.push(new int[]{nextYPos, nextXPos});
         }
     }

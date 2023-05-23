@@ -3,11 +3,13 @@ package com.dt183g.project.mvc.models;
 public class Vertex {
     private int xCoordinate;
     private int yCoordinate;
+    private int distance;
 
-    public Vertex(int x, int y) {
+    public Vertex(int distance, int x, int y) {
         // TODO Don't know if we need this class, if not delete
         this.xCoordinate = x;
         this.yCoordinate = y;
+        this.distance = distance;
     }
 
     public int getXCoordinate() {
@@ -25,4 +27,8 @@ public class Vertex {
     public void setYCoordinate(int y) {
         yCoordinate = y;
     }
+
+    public void setDistance(int distance) {this.distance = distance;}
+
+    public int getDistance() {return distance;}
 }
