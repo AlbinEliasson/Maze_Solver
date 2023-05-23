@@ -1,7 +1,6 @@
 package com.dt183g.project.mvc.models;
 
 import com.dt183g.project.mvc.controllers.MazeController;
-import com.dt183g.project.utility.FileReader;
 
 import java.awt.Point;
 import java.util.Stack;
@@ -25,28 +24,6 @@ public class MazeModel {
         mazePath[startPosition.y / 10][startPosition.x / 10] = maze[startPosition.y / 10][startPosition.x / 10];
         findMazePath(endPosition);
         // TODO Implement...
-    }
-
-    private void printMaze() {
-            int rowCounter = 0;
-            for (int i = 0; i < mazePath.length; i++) {
-                for (int j = 0; j < mazePath[i].length; j++) {
-                    System.out.printf("%d", mazePath[i][j]);
-                }
-                System.out.print(" " + rowCounter);
-                rowCounter++;
-                System.out.println();
-            }
-
-            rowCounter = 0;
-            for (int i = 0; i < maze.length; i++) {
-                for (int j = 0; j < maze[i].length; j++) {
-                    System.out.printf("%d", maze[i][j]);
-                }
-                System.out.print(" " + rowCounter);
-                rowCounter++;
-                System.out.println();
-            }
     }
 
     public void findMazePath(Point endPosition) {
@@ -100,7 +77,6 @@ public class MazeModel {
                 if (checkRight(currentXPos, currentYPos, currentPos)) {
                     return true;
                 }
-                // If no path exists, stop loop and write to file
                 return false;
             }
             case "up" -> {
@@ -131,7 +107,6 @@ public class MazeModel {
                 if (checkUp(currentXPos, currentYPos, currentPos)) {
                     return true;
                 }
-                // If no path exists, stop loop and write to file
                 return false;
             }
             default -> {
@@ -227,6 +202,29 @@ public class MazeModel {
         this.maze = maze;
         stack.clear();
         findingPath = true;
+        previousMove = "";
+    }
+
+    private void printMaze() {
+        int rowCounter = 0;
+        for (int i = 0; i < mazePath.length; i++) {
+            for (int j = 0; j < mazePath[i].length; j++) {
+                System.out.printf("%d", mazePath[i][j]);
+            }
+            System.out.print(" " + rowCounter);
+            rowCounter++;
+            System.out.println();
+        }
+
+        rowCounter = 0;
+        for (int i = 0; i < maze.length; i++) {
+            for (int j = 0; j < maze[i].length; j++) {
+                System.out.printf("%d", maze[i][j]);
+            }
+            System.out.print(" " + rowCounter);
+            rowCounter++;
+            System.out.println();
+        }
     }
 
     private int getMazeRows() {
