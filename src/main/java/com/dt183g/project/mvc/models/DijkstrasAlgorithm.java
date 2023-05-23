@@ -17,19 +17,20 @@ public class DijkstrasAlgorithm {
 
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                mazePath[i][j] = (int)(1e9);
+                //mazePath[i][j] = (int)(1e9);
+                mazePath[i][j] = 90;
             }
         }
 
-        mazePath[startPosition.y / 10][startPosition.x / 10] = 0;
-        vertexQueue.add(new Vertex(0, startPosition.x / 10, startPosition.y / 10));
+        mazePath[startPosition.y][startPosition.x] = 0;
+        vertexQueue.add(new Vertex(0, startPosition.x, startPosition.y));
         int[] dr = {-1, 0, 1, 0};
         int[] dc = {0, 1, 0, -1};
 
         while (!vertexQueue.isEmpty()) {
             Vertex vertex = vertexQueue.remove();
-            controller.displayPath(new Point(vertex.getXCoordinate() * 10, vertex.getYCoordinate() * 10));
-            for(int i = 0; i < 4;i++) {
+            controller.displayPath(new Point(vertex.getXCoordinate(), vertex.getYCoordinate()));
+            for(int i = 0; i < 4; i++) {
                 int newX = vertex.getXCoordinate() + dr[i];
                 int newY = vertex.getYCoordinate() + dc[i];
 
@@ -38,7 +39,15 @@ public class DijkstrasAlgorithm {
 
                     mazePath[newY][newX] = 1 + vertex.getDistance();
 
-                    if (newX == endPosition.x / 10 && newY == endPosition.y / 10) {
+                    if (newX == endPosition.x && newY == endPosition.y) {
+                        System.out.format("Current X: %d Y: %d%n", newX, newY);
+                        System.out.format("Destination X: %d Y: %d%n", endPosition.x, endPosition.y);
+                        for (int x = 0; x < maze.length; x++) {
+                            for (int j = 0; j < maze[0].length; j++) {
+                                System.out.print(mazePath[x][j]);
+                            }
+                            System.out.println();
+                        }
                         return vertex.getDistance() + 1;
                     }
                     vertexQueue.add(new Vertex(vertex.getDistance() + 1, newX, newY));

@@ -13,18 +13,19 @@ public class MazeController {
     private final MazeModel mazeModel;
     private final MazeView mazeView;
     private final BufferedImage rescaledMazeImage;
+    private final BufferedImage mazeImage;
 
     public MazeController() {
         //TODO Either utilize the controller directly for calling methods or use an observer pattern
         fileReader = new FileReader();
 
-        BufferedImage mazeImage = fileReader.readMazeImage("med7.jpg");
+        mazeImage = fileReader.readMazeImage("med7.jpg");
         mazeView = new MazeView(mazeImage, this);
 
         rescaledMazeImage = fileReader.resizeImage(mazeImage, mazeImage.getWidth() / 10, mazeImage.getHeight() / 10);
         //mazeImage = fileReader.removeColorThreshold(mazeImage);
 
-        mazeModel = new MazeModel(getMaze(), this);
+        mazeModel = new MazeModel(getRescaledMaze(), this);
     }
 
     public void solveMaze(Point startPosition, Point endPosition) {
@@ -42,10 +43,14 @@ public class MazeController {
 
     public void resetMaze() {
         mazeView.resetImage();
-        mazeModel.resetMaze(getMaze());
+        mazeModel.resetMaze(getRescaledMaze());
     }
 
-    private int[][] getMaze() {
+    private int[][] getRescaledMaze() {
         return fileReader.getMatrixFromImage(rescaledMazeImage);
+    }
+
+    public int[][] getMaze() {
+        return fileReader.getMatrixFromImage(fileReader.removeColorThreshold(mazeImage));
     }
 }
