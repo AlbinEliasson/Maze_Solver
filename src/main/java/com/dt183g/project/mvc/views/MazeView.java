@@ -102,8 +102,7 @@ public class MazeView {
 
     private void addResetButtonListener(JButton resetButton) {
         resetButton.addActionListener(e -> {
-            mazePanel.resetImage();
-            disableSolveButton();
+            mazeController.resetMaze();
         });
     }
 
@@ -144,5 +143,10 @@ public class MazeView {
     public void displayMazePath(Point position) {
         mazePanel.setMazePath(position);
         mazePanel.repaint();
+    }
+
+    public void resetImage() {
+        mazePanel.resetImage();
+        disableSolveButton();
     }
 }

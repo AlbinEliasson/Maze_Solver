@@ -1,13 +1,14 @@
 package com.dt183g.project.mvc.models;
 
 import com.dt183g.project.mvc.controllers.MazeController;
+import com.dt183g.project.utility.FileReader;
 
 import java.awt.Point;
 import java.util.Stack;
 
 public class MazeModel {
     private final MazeController mazeController;
-    private final int[][] maze;
+    private int[][] maze;
     private int[][] mazePath;
     private Stack<int[]> stack = new Stack<>();
     private boolean findingPath = true;
@@ -220,6 +221,12 @@ public class MazeModel {
             mazePath[nextYPos][nextXPos] = 2;
             stack.push(new int[]{nextYPos, nextXPos});
         }
+    }
+
+    public void resetMaze(int[][] maze) {
+        this.maze = maze;
+        stack.clear();
+        findingPath = true;
     }
 
     private int getMazeRows() {
