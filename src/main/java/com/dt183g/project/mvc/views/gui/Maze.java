@@ -122,7 +122,7 @@ public class Maze extends JPanel {
         }
         if (!mazePath.isEmpty()) {
             graphics.setColor(Color.RED);
-            mazePath.forEach(point -> graphics.fillRect(point.x, point.y, 5, 5));
+            mazePath.forEach(point -> graphics.fillRect(point.x, point.y, 3, 3));
         }
     }
 }
