@@ -101,15 +101,11 @@ public class MazeView {
     }
 
     private void addResetButtonListener(JButton resetButton) {
-        resetButton.addActionListener(e -> {
-            mazeController.resetMaze();
-        });
+        resetButton.addActionListener(e -> mazeController.resetMaze());
     }
 
     private void addSolveButtonListener(JButton solveButton) {
-        solveButton.addActionListener(e -> {
-            mazeController.solveMaze(mazePanel.getStartPosition(), mazePanel.getEndPosition(), "Dijkstras algorithm queue");
-        });
+        solveButton.addActionListener(e -> mazeController.solveMaze(mazePanel.getStartPosition(), mazePanel.getEndPosition(), "Dijkstras algorithm queue"));
     }
 
     private void addMazeClickListener() {
