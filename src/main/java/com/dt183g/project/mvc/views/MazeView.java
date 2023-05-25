@@ -5,6 +5,7 @@ import com.dt183g.project.mvc.views.gui.Maze;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
@@ -15,6 +16,7 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public class MazeView {
     private JFrame windowFrame;
@@ -24,12 +26,15 @@ public class MazeView {
     private JButton setEndButton;
     private JButton resetButton;
     private JButton solveButton;
+    private JComboBox<String> algorithmMenu;
     private final Maze mazePanel;
     private final MazeController mazeController;
+    private final String[] algorithms;
 
     public MazeView(BufferedImage mazeImage, MazeController controller) {
         this.mazePanel = new Maze(mazeImage);
         this.mazeController = controller;
+        algorithms = new String[] {"Dijkstras algorithm queue", "Dijkstras algorithm something", "A* algorithm"};
         addMazeClickListener();
         initializeWindow();
     }
@@ -50,7 +55,7 @@ public class MazeView {
     private void initializeWindowPanel() {
         windowPanel = new JPanel();
         windowPanel.setLayout(new BorderLayout());
-        windowPanel.setPreferredSize(new Dimension(mazePanel.getMazeImageWidth(), (int) (mazePanel.getMazeImageHeight() * 1.1)));
+        windowPanel.setPreferredSize(new Dimension(mazePanel.getMazeImageWidth(), (int) (mazePanel.getMazeImageHeight() * 1.13)));
         windowPanel.add(mazePanel, BorderLayout.CENTER);
         windowPanel.add(menuPanel, BorderLayout.NORTH);
     }
@@ -59,7 +64,7 @@ public class MazeView {
         menuPanel = new JPanel();
         menuPanel.setBackground(new Color(164, 164, 164));
         menuPanel.setBorder(BorderFactory.createBevelBorder(1, Color.GRAY, Color.WHITE));
-        menuPanel.setPreferredSize(new Dimension(mazePanel.getMazeImageWidth(), (int) (mazePanel.getMazeImageHeight() * 0.1)));
+        menuPanel.setPreferredSize(new Dimension(mazePanel.getMazeImageWidth(), (int) (mazePanel.getMazeImageHeight() * 0.13)));
 
         setStartButton = new JButton(" Set start ");
         initializeMenuButton(setStartButton);
@@ -78,10 +83,16 @@ public class MazeView {
         initializeMenuButton(solveButton);
         addSolveButtonListener(solveButton);
 
+        algorithmMenu = new JComboBox<>(algorithms);
+        algorithmMenu.setBorder(BorderFactory.createBevelBorder(0));
+        algorithmMenu.setBackground(Color.LIGHT_GRAY);
+        algorithmMenu.setFont(new Font("Monaco", Font.BOLD, (int) (mazePanel.getMazeImageWidth() * 0.03)));
+
         menuPanel.add(setStartButton);
         menuPanel.add(setEndButton);
         menuPanel.add(resetButton);
         menuPanel.add(solveButton);
+        menuPanel.add(algorithmMenu);
     }
 
     private void addSetStartButtonListener(JButton setStartButton) {
@@ -105,7 +116,8 @@ public class MazeView {
     }
 
     private void addSolveButtonListener(JButton solveButton) {
-        solveButton.addActionListener(e -> mazeController.solveMaze(mazePanel.getStartPosition(), mazePanel.getEndPosition(), "Dijkstras algorithm queue"));
+        solveButton.addActionListener(e -> mazeController.solveMaze(mazePanel.getStartPosition(),
+                mazePanel.getEndPosition(), Objects.requireNonNull(algorithmMenu.getSelectedItem()).toString()));
     }
 
     private void addMazeClickListener() {
