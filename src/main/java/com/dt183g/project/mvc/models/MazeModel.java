@@ -3,235 +3,104 @@ package com.dt183g.project.mvc.models;
 import com.dt183g.project.mvc.controllers.MazeController;
 
 import java.awt.Point;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class MazeModel {
     private final MazeController mazeController;
-    private int[][] maze;
-    private int[][] mazePath;
-    private Stack<int[]> stack = new Stack<>();
-    private boolean findingPath = true;
-    private String previousMove = "";
+    private boolean pathFound = false;
 
-    public MazeModel(int[][] maze, MazeController controller) {
-        this.maze = maze;
+    public MazeModel(MazeController controller) {
         this.mazeController = controller;
     }
 
-    public void solveMaze(Point startPosition, Point endPosition) {
-        stack.push(new int[]{startPosition.y / 10, startPosition.x / 10});
-        mazePath = new int[maze.length][maze[0].length];
-        mazePath[startPosition.y / 10][startPosition.x / 10] = maze[startPosition.y / 10][startPosition.x / 10];
-        findMazePath(endPosition);
-        // TODO Implement...
-    }
-
-    public void findMazePath(Point endPosition) {
-        while (findingPath) {
-            // Get current x-position and y-position
-            if (stack.isEmpty()) {
-                printMaze();
-            }
-            int xPosition = stack.peek()[1];
-            int yPosition = stack.peek()[0];
-
-            // If x and y-position is in the bottom right corner of the maze (the exit)
-            if (xPosition == endPosition.x / 10 && yPosition == endPosition.y / 10) {
-                // Stop searching and write the resulting path to the file
-                findingPath = false;
-                System.out.println("FOUND!");
-            } else {
-                checkAdjacentPaths(xPosition, yPosition, stack.peek());
-            }
-        }
-        printMaze();
-    }
-
-    private boolean test(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        switch (previousMove) {
-            case "right" -> {
-                if (checkUp(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkDown(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkRight(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkLeft(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                return false;
-            }
-            case "left" -> {
-                if (checkLeft(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkUp(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkDown(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkRight(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                return false;
-            }
-            case "up" -> {
-                if (checkRight(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkLeft(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkUp(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkDown(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                return false;
-            }
-            case "down" -> {
-                if (checkDown(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkRight(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkLeft(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                if (checkUp(currentXPos, currentYPos, currentPos)) {
-                    return true;
-                }
-                return false;
-            }
-            default -> {
-                return false;
-            }
+    public void solveMaze(Point startPosition, Point endPosition, int[][] maze, String algorithm) {
+        switch (algorithm) {
+            case "Dijkstras algorithm queue" -> dijkstrasAlgorithmQueue(maze, startPosition, endPosition);
         }
     }
 
-    private void checkAdjacentPaths(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        // Check right position is not outside the maze and if moving right is possible (1)
-        if (test(currentXPos, currentYPos, currentPos)) {
-            return;
-        }
-        if (checkRight(currentXPos, currentYPos, currentPos)) {
-            return;
-        }
-        if (checkUp(currentXPos, currentYPos, currentPos)) {
-            return;
-        }
-        if (checkLeft(currentXPos, currentYPos, currentPos)) {
-            return;
-        }
-        if (checkDown(currentXPos, currentYPos, currentPos)) {
-            return;
-        }
+    public void dijkstrasAlgorithmQueue(int[][] maze, Point startPosition, Point endPosition) {
+        // TODO make algorithm more efficient!
+        Stack<Vertex> resultPath = new Stack<>();
+        Queue<Vertex> vertexQueue = new LinkedList<>();
+        int[][] mazePath = new int[maze.length][maze[0].length];
 
-        // If no path exists, stop loop and write to file
-        findingPath = false;
-        System.out.println("NOT FOUND!");
-    }
-
-    private boolean checkRight(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        if (currentXPos < getMazeColumns() - 1 && maze[currentYPos][currentXPos + 1] == 1) {
-            System.out.println("RIGHT!");
-            previousMove = "right";
-            move(currentXPos + 1, currentYPos, currentPos);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean checkLeft(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        if (currentXPos > 0 && maze[currentYPos][currentXPos - 1] == 1) {
-            System.out.println("LEFT!");
-            previousMove = "left";
-            move(currentXPos - 1, currentYPos, currentPos);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean checkUp(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        if (currentYPos > 0 && maze[currentYPos - 1][currentXPos] == 1) {
-            System.out.println("UP!");
-            previousMove = "up";
-            move(currentXPos, currentYPos - 1, currentPos);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean checkDown(final int currentXPos, final int currentYPos, final int[] currentPos) {
-        if (currentYPos < getMazeRows() - 1 && maze[currentYPos + 1][currentXPos] == 1) {
-            System.out.println("DOWN!");
-            previousMove = "down";
-            move(currentXPos, currentYPos + 1, currentPos);
-            return true;
-        }
-        return false;
-    }
-
-    private void move(final int nextXPos, final int nextYPos, final int[] currentPosition) {
-        // If the stack has already added the next coordinates before
-        //mazeController.displayPath(new Point(nextXPos * 10, nextYPos * 10));
-        System.out.format("X: %d Y: %d%n", nextXPos, nextYPos);
-
-        if (mazePath[nextYPos][nextXPos] == 1) {
-            // Set the path to non-walkable
-            maze[currentPosition[0]][currentPosition[1]] = 2;
-            // Remove the coordinates
-            stack.pop();
-
-        } else {
-            mazeController.displayPath(new Point(nextXPos * 10, nextYPos * 10));
-            //System.out.format("X: %d Y: %d%n", nextXPos, nextYPos);
-            // Add the new path to the "empty" maze and push the coordinates to the stack
-            mazePath[nextYPos][nextXPos] = 1;
-            stack.push(new int[]{nextYPos, nextXPos});
-        }
-    }
-
-    public void resetMaze(int[][] maze) {
-        this.maze = maze;
-        stack.clear();
-        findingPath = true;
-        previousMove = "";
-    }
-
-    private void printMaze() {
-        int rowCounter = 0;
-        for (int i = 0; i < mazePath.length; i++) {
-            for (int j = 0; j < mazePath[i].length; j++) {
-                System.out.printf("%d", mazePath[i][j]);
-            }
-            System.out.print(" " + rowCounter);
-            rowCounter++;
-            System.out.println();
-        }
-
-        rowCounter = 0;
         for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[i].length; j++) {
-                System.out.printf("%d", maze[i][j]);
+            for (int j = 0; j < maze[0].length; j++) {
+                mazePath[i][j] = (int)(1e5);
+                //mazePath[i][j] = 90;
             }
-            System.out.print(" " + rowCounter);
-            rowCounter++;
-            System.out.println();
+        }
+
+        mazePath[startPosition.y][startPosition.x] = 0;
+        vertexQueue.add(new Vertex(0, startPosition.x, startPosition.y));
+        resultPath.push(new Vertex(0, startPosition.x, startPosition.y));
+        int[] possibleDirectionX = {-1, 0, 1, 0};
+        int[] possibleDirectionY = {0, 1, 0, -1};
+
+        while (!vertexQueue.isEmpty()) {
+            Vertex vertex = vertexQueue.remove();
+            for(int i = 0; i < 4; i++) {
+                int newX = vertex.getXCoordinate() + possibleDirectionX[i];
+                int newY = vertex.getYCoordinate() + possibleDirectionY[i];
+
+                if (newX >= 0 && newX < maze[0].length && newY >= 0 && newY < maze.length && maze[newY][newX] == 1
+                        && vertex.getDistance() + 1 < mazePath[newY][newX]) {
+
+                    mazePath[newY][newX] = 1 + vertex.getDistance();
+
+                    if (newX == endPosition.x && newY == endPosition.y) {
+                        pathFound = true;
+                        System.out.format("Current X: %d Y: %d%n", newX, newY);
+                        System.out.format("Destination X: %d Y: %d%n", endPosition.x, endPosition.y);
+
+                        resultPath.push(new Vertex(vertex.getDistance() + 1, endPosition.x, endPosition.y));
+                        Vertex test = resultPath.pop();
+                        System.out.format("X: %d Y: %d distance: %d%n", test.getXCoordinate(), test.getYCoordinate(), test.getDistance());
+                        displayPath(new Point(test.getXCoordinate(), test.getYCoordinate()));
+                        while (!resultPath.isEmpty()) {
+                            Vertex vertex1 = resultPath.pop();
+
+                            if (test.getXCoordinate() == vertex1.getXCoordinate() && test.getYCoordinate() - 1 == vertex1.getYCoordinate()) {
+                                test = vertex1;
+                                System.out.format("X: %d Y: %d distance: %d%n", vertex1.getXCoordinate(), vertex1.getYCoordinate(), vertex1.getDistance());
+                                displayPath(new Point(vertex1.getXCoordinate(), vertex1.getYCoordinate()));
+
+                            } else if (test.getXCoordinate() - 1 == vertex1.getXCoordinate() && test.getYCoordinate() == vertex1.getYCoordinate()) {
+                                test = vertex1;
+                                System.out.format("X: %d Y: %d distance: %d%n", vertex1.getXCoordinate(), vertex1.getYCoordinate(), vertex1.getDistance());
+                                displayPath(new Point(vertex1.getXCoordinate(), vertex1.getYCoordinate()));
+
+                            } else if (test.getXCoordinate() == vertex1.getXCoordinate() && test.getYCoordinate() + 1 == vertex1.getYCoordinate()) {
+                                test = vertex1;
+                                System.out.format("X: %d Y: %d distance: %d%n", vertex1.getXCoordinate(), vertex1.getYCoordinate(), vertex1.getDistance());
+                                displayPath(new Point(vertex1.getXCoordinate(), vertex1.getYCoordinate()));
+
+                            } else if (test.getXCoordinate() + 1 == vertex1.getXCoordinate() && test.getYCoordinate() == vertex1.getYCoordinate()) {
+                                test = vertex1;
+                                System.out.format("X: %d Y: %d distance: %d%n", vertex1.getXCoordinate(), vertex1.getYCoordinate(), vertex1.getDistance());
+                                displayPath(new Point(vertex1.getXCoordinate(), vertex1.getYCoordinate()));
+                            }
+                        }
+                        System.out.println("Final distance: " + (vertex.getDistance() + 1));
+                    }
+                    resultPath.push(new Vertex(vertex.getDistance() + 1, newX, newY));
+                    vertexQueue.add(new Vertex(vertex.getDistance() + 1, newX, newY));
+                }
+            }
+        }
+        if (!pathFound) {
+            System.out.println("End not found!");
         }
     }
 
-    private int getMazeRows() {
-        return maze.length;
+    private void displayPath(Point position) {
+        mazeController.displayPath(position);
     }
 
-    private int getMazeColumns() {
-        return maze[0].length;
+    public void resetMaze() {
+        pathFound = false;
     }
 }

@@ -1,6 +1,5 @@
 package com.dt183g.project.mvc.controllers;
 
-import com.dt183g.project.mvc.models.DijkstrasAlgorithm;
 import com.dt183g.project.mvc.models.MazeModel;
 import com.dt183g.project.mvc.views.MazeView;
 import com.dt183g.project.utility.FileReader;
@@ -12,29 +11,19 @@ public class MazeController {
     private final FileReader fileReader;
     private final MazeModel mazeModel;
     private final MazeView mazeView;
-    private final BufferedImage rescaledMazeImage;
     private final BufferedImage mazeImage;
 
     public MazeController() {
         //TODO Either utilize the controller directly for calling methods or use an observer pattern
         fileReader = new FileReader();
-
         mazeImage = fileReader.readMazeImage("med7.jpg");
         mazeView = new MazeView(mazeImage, this);
-
-        rescaledMazeImage = fileReader.resizeImage(mazeImage, mazeImage.getWidth() / 10, mazeImage.getHeight() / 10);
-        //mazeImage = fileReader.removeColorThreshold(mazeImage);
-
-        mazeModel = new MazeModel(getRescaledMaze(), this);
+        mazeModel = new MazeModel(this);
     }
 
-    public void solveMaze(Point startPosition, Point endPosition) {
+    public void solveMaze(Point startPosition, Point endPosition, String algorithm) {
         System.out.printf("Start position X: %d Y: %d | End position X: %d Y: %d%n", startPosition.x, startPosition.y, endPosition.x, endPosition.y);
-        //mazeModel.solveMaze(startPosition, endPosition);
-
-        DijkstrasAlgorithm algorithm = new DijkstrasAlgorithm(this);
-        int test = algorithm.solveMaze(getMaze(), startPosition, endPosition);
-        System.out.println("Final length: " + test);
+        mazeModel.solveMaze(startPosition, endPosition, getMaze(), algorithm);
     }
 
     public void displayPath(Point position) {
@@ -43,11 +32,7 @@ public class MazeController {
 
     public void resetMaze() {
         mazeView.resetImage();
-        mazeModel.resetMaze(getRescaledMaze());
-    }
-
-    private int[][] getRescaledMaze() {
-        return fileReader.getMatrixFromImage(rescaledMazeImage);
+        mazeModel.resetMaze();
     }
 
     public int[][] getMaze() {

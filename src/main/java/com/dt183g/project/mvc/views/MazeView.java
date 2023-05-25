@@ -108,7 +108,7 @@ public class MazeView {
 
     private void addSolveButtonListener(JButton solveButton) {
         solveButton.addActionListener(e -> {
-            mazeController.solveMaze(mazePanel.getStartPosition(), mazePanel.getEndPosition());
+            mazeController.solveMaze(mazePanel.getStartPosition(), mazePanel.getEndPosition(), "Dijkstras algorithm queue");
         });
     }
 

@@ -6,7 +6,6 @@ public class Vertex {
     private int distance;
 
     public Vertex(int distance, int x, int y) {
-        // TODO Don't know if we need this class, if not delete
         this.xCoordinate = x;
         this.yCoordinate = y;
         this.distance = distance;
