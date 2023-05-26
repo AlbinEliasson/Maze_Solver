@@ -1,14 +1,32 @@
 package com.dt183g.project.mvc.models;
 
-public class Vertex {
+public class Vertex implements Comparable<Vertex> {
     private int xCoordinate;
     private int yCoordinate;
     private int distance;
+    private double f;
+    private Vertex previous;
 
-    public Vertex(int distance, int x, int y) {
+
+    public Vertex(int x, int y) {
         this.xCoordinate = x;
         this.yCoordinate = y;
-        this.distance = distance;
+    }
+
+    public double getF() {
+        return f;
+    }
+
+    public void setF(double f) {
+        this.f = f;
+    }
+
+    public Vertex getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(Vertex previous) {
+        this.previous = previous;
     }
 
     public int getXCoordinate() {
@@ -30,4 +48,9 @@ public class Vertex {
     public void setDistance(int distance) {this.distance = distance;}
 
     public int getDistance() {return distance;}
+
+    @Override
+    public int compareTo(Vertex o) {
+        return Double.compare(this.getF(), o.getF());
+    }
 }

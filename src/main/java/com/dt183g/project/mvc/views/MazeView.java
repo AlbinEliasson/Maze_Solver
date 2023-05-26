@@ -34,7 +34,7 @@ public class MazeView {
     public MazeView(BufferedImage mazeImage, MazeController controller) {
         this.mazePanel = new Maze(mazeImage);
         this.mazeController = controller;
-        algorithms = new String[] {"Dijkstras algorithm queue", "Dijkstras algorithm something", "A* algorithm"};
+        algorithms = new String[] {"Dijkstras algorithm queue", "Dijkstras algorithm minHeap", "A* algorithm"};
         addMazeClickListener();
         initializeWindow();
     }
