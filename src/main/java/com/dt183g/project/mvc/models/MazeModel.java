@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Stack;
 
 public class MazeModel {
     private final MazeController mazeController;
@@ -26,7 +25,6 @@ public class MazeModel {
 
     public void dijkstrasAlgorithmQueue(int[][] maze, Point startPosition, Point endPosition) {
         // TODO make algorithm more efficient!
-        Stack<Vertex> resultPath = new Stack<>();
         Queue<Vertex> vertexQueue = new LinkedList<>();
         int[][] mazePathDistance = new int[maze.length][maze[0].length];
 
@@ -41,7 +39,7 @@ public class MazeModel {
 
         mazePathDistance[startPosition.y][startPosition.x] = 0;
         vertexQueue.add(startVertex);
-        resultPath.push(startVertex);
+
         int[] possibleDirectionX = {-1, 0, 1, 0};
         int[] possibleDirectionY = {0, 1, 0, -1};
 
@@ -63,41 +61,20 @@ public class MazeModel {
 
                         Vertex endVertex = new Vertex(newX, newY);
                         endVertex.setDistance(nextVertex.getDistance() + 1);
+                        endVertex.setPrevious(nextVertex);
 
-                        resultPath.push(endVertex);
-                        Vertex vertexEndPosition = resultPath.pop();
-                        System.out.format("X: %d Y: %d distance: %d%n", vertexEndPosition.getXCoordinate(), vertexEndPosition.getYCoordinate(), vertexEndPosition.getDistance());
-                        displayPath(new Point(vertexEndPosition.getXCoordinate(), vertexEndPosition.getYCoordinate()));
-                        while (!resultPath.isEmpty()) {
-                            Vertex vertex = resultPath.pop();
-
-                            if (vertexEndPosition.getXCoordinate() == vertex.getXCoordinate() && vertexEndPosition.getYCoordinate() - 1 == vertex.getYCoordinate()) {
-                                vertexEndPosition = vertex;
-                                System.out.format("X: %d Y: %d distance: %d%n", vertex.getXCoordinate(), vertex.getYCoordinate(), vertex.getDistance());
-                                displayPath(new Point(vertex.getXCoordinate(), vertex.getYCoordinate()));
-
-                            } else if (vertexEndPosition.getXCoordinate() - 1 == vertex.getXCoordinate() && vertexEndPosition.getYCoordinate() == vertex.getYCoordinate()) {
-                                vertexEndPosition = vertex;
-                                System.out.format("X: %d Y: %d distance: %d%n", vertex.getXCoordinate(), vertex.getYCoordinate(), vertex.getDistance());
-                                displayPath(new Point(vertex.getXCoordinate(), vertex.getYCoordinate()));
-
-                            } else if (vertexEndPosition.getXCoordinate() == vertex.getXCoordinate() && vertexEndPosition.getYCoordinate() + 1 == vertex.getYCoordinate()) {
-                                vertexEndPosition = vertex;
-                                System.out.format("X: %d Y: %d distance: %d%n", vertex.getXCoordinate(), vertex.getYCoordinate(), vertex.getDistance());
-                                displayPath(new Point(vertex.getXCoordinate(), vertex.getYCoordinate()));
-
-                            } else if (vertexEndPosition.getXCoordinate() + 1 == vertex.getXCoordinate() && vertexEndPosition.getYCoordinate() == vertex.getYCoordinate()) {
-                                vertexEndPosition = vertex;
-                                System.out.format("X: %d Y: %d distance: %d%n", vertex.getXCoordinate(), vertex.getYCoordinate(), vertex.getDistance());
-                                displayPath(new Point(vertex.getXCoordinate(), vertex.getYCoordinate()));
-                            }
+                        while (endVertex != null) {
+                            System.out.format("X: %d Y: %d distance: %d%n", endVertex.getXCoordinate(), endVertex.getYCoordinate(), endVertex.getDistance());
+                            displayPath(new Point(endVertex.getXCoordinate(), endVertex.getYCoordinate()));
+                            endVertex = endVertex.getPrevious();
                         }
                         System.out.println("Final distance: " + (nextVertex.getDistance() + 1));
                         break;
                     }
                     Vertex newVertex = new Vertex(newX, newY);
                     newVertex.setDistance(nextVertex.getDistance() + 1);
-                    resultPath.push(newVertex);
+                    newVertex.setPrevious(nextVertex);
+
                     vertexQueue.add(newVertex);
                 }
             }
