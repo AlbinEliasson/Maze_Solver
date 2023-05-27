@@ -6,7 +6,7 @@ public class Vertex implements Comparable<Vertex> {
     private int distance;
     private double f;
     private Vertex previous;
-
+    private boolean compareDistance = false;
 
     public Vertex(int x, int y) {
         this.xCoordinate = x;
@@ -49,8 +49,19 @@ public class Vertex implements Comparable<Vertex> {
 
     public int getDistance() {return distance;}
 
+    public void setCompareDistance(boolean compareDistance) {
+        this.compareDistance = compareDistance;
+    }
+
+    public boolean isCompareDistance() {
+        return compareDistance;
+    }
+
     @Override
     public int compareTo(Vertex o) {
+        if (compareDistance) {
+            return Integer.compare(this.getDistance(), o.getDistance());
+        }
         return Double.compare(this.getF(), o.getF());
     }
 }
