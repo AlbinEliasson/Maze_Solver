@@ -17,28 +17,32 @@ public class MazeModel {
 
     public void solveMaze(Point startPosition, Point endPosition, int[][] maze, String algorithm) {
         switch (algorithm) {
-            case "Dijkstras algorithm queue" -> dijkstrasAlgorithmQueue(maze, startPosition, endPosition);
-            case "Dijkstras algorithm minHeap" -> dijkstrasAlgorithmMinHeap(maze, new Vertex(startPosition.x, startPosition.y), new Vertex(endPosition.x, endPosition.y));
-            case "A* algorithm" -> aStarAlgorithm(maze, new Vertex(startPosition.x, startPosition.y), new Vertex(endPosition.x, endPosition.y));
+            case "Dijkstras algorithm queue" -> dijkstrasAlgorithmQueue(maze, new Vertex(
+                    startPosition.x, startPosition.y), new Vertex(endPosition.x, endPosition.y));
+
+            case "Dijkstras algorithm minHeap" -> dijkstrasAlgorithmMinHeap(
+                    maze, new Vertex(startPosition.x, startPosition.y), new Vertex(endPosition.x, endPosition.y));
+
+            case "A* algorithm" -> aStarAlgorithm(maze, new Vertex(
+                    startPosition.x, startPosition.y), new Vertex(endPosition.x, endPosition.y));
         }
     }
 
-    public void dijkstrasAlgorithmQueue(int[][] maze, Point startPosition, Point endPosition) {
+    public void dijkstrasAlgorithmQueue(int[][] maze, Vertex startPosition, Vertex endPosition) {
         // TODO make algorithm more efficient!
         Queue<Vertex> vertexQueue = new LinkedList<>();
         int[][] mazePathDistance = new int[maze.length][maze[0].length];
 
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                mazePathDistance[i][j] = (int)(1e5);
-                //mazePath[i][j] = 90;
+                mazePathDistance[i][j] = Integer.MAX_VALUE;
             }
         }
-        Vertex startVertex = new Vertex(startPosition.x, startPosition.y);
-        startVertex.setDistance(0);
 
-        mazePathDistance[startPosition.y][startPosition.x] = 0;
-        vertexQueue.add(startVertex);
+        startPosition.setDistance(0);
+
+        mazePathDistance[startPosition.getYCoordinate()][startPosition.getXCoordinate()] = 0;
+        vertexQueue.add(startPosition);
 
         int[] possibleDirectionX = {-1, 0, 1, 0};
         int[] possibleDirectionY = {0, 1, 0, -1};
@@ -54,10 +58,10 @@ public class MazeModel {
 
                     mazePathDistance[newY][newX] = 1 + nextVertex.getDistance();
 
-                    if (newX == endPosition.x && newY == endPosition.y) {
+                    if (newX == endPosition.getXCoordinate() && newY == endPosition.getYCoordinate()) {
                         pathFound = true;
                         System.out.format("Current X: %d Y: %d%n", newX, newY);
-                        System.out.format("Destination X: %d Y: %d%n", endPosition.x, endPosition.y);
+                        System.out.format("Destination X: %d Y: %d%n", endPosition.getXCoordinate(), endPosition.getYCoordinate());
 
                         Vertex endVertex = new Vertex(newX, newY);
                         endVertex.setDistance(nextVertex.getDistance() + 1);
@@ -91,8 +95,7 @@ public class MazeModel {
 
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                mazePathDistance[i][j] = (int)(1e5);
-                //mazePath[i][j] = 90;
+                mazePathDistance[i][j] = Integer.MAX_VALUE;
             }
         }
         startPosition.setDistance(0);
@@ -154,8 +157,7 @@ public class MazeModel {
 
         for (int i = 0; i < maze.length; i++) {
             for (int j = 0; j < maze[0].length; j++) {
-                mazePathDistance[i][j] = (int)(1e5);
-                //mazePath[i][j] = 90;
+                mazePathDistance[i][j] = Integer.MAX_VALUE;
             }
         }
         startPosition.setDistance(0);

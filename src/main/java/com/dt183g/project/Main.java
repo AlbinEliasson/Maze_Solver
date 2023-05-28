@@ -10,21 +10,5 @@ public class Main {
         System.out.println("Maze!");
 
         SwingUtilities.invokeLater(MazeController::new);
-
-
-//        int[][] test = fileReader.getMatrixFromImage(mazeImage);
-        //System.out.println(test.length);
-
-//        for (int i = 0; i < test.length; i++) {
-//            for (int j = 0; j < test[i].length; j++) {
-////                if (test[i][j] == 1) {
-////                    System.out.printf("%d", test[i][j]);
-////                } else {
-////                    System.out.print(" ");
-////                }
-//                System.out.printf("%d", test[i][j]);
-//            }
-//            System.out.println();
-//        }
     }
 }
