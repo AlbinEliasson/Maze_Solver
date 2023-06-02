@@ -6,7 +6,6 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,6 +86,16 @@ public class MazeReader {
         return new MazeReader(ImageIO.read(Objects.requireNonNull(MazeReader.class.getResource("/" + file))));
     }
 
+    public int[][] getMazeMatrix() {
+        // TODO: Return copy of matrix instead.
+        return this.mazeMatrix;
+    }
+
+    public int getCell(int x, int y) {
+        // TODO: Validate to make safe.
+        return this.mazeMatrix[x][y];
+    }
+
     /**
      * A direction.
      */
@@ -118,6 +127,42 @@ public class MazeReader {
     public int translateImageYToMatrixY(int imageY) {
         // TODO: Optimize this.
         return ((imageY - this.offsetStartY) / (this.blockHeight + this.borderThickness)) * 2 + ((imageY - this.offsetStartY) % (this.blockHeight + this.borderThickness) == 0 ? 0 : 1);
+    }
+
+    public int normalizeImageX(int imageX, Direction direction) {
+        // TODO: Maybe redo this, it feels inefficient.
+        return this.translateMatrixXToImageX(this.translateImageXToMatrixX(imageX), direction);
+    }
+
+    public int normalizeImageX(int imageX) {
+        return this.normalizeImageX(imageX, Direction.Center);
+    }
+
+    public int normalizeImageY(int imageY, Direction direction) {
+        // TODO: Maybe redo this, it feels inefficient.
+        return this.translateMatrixYToImageY(this.translateImageYToMatrixY(imageY), direction);
+    }
+
+    public int normalizeImageY(int imageY) {
+        return this.normalizeImageY(imageY, Direction.Center);
+    }
+
+    public boolean isValidImageX(int imageX) {
+        // TODO: Don't flipping do this, it is massively redundant since it
+        //       requires that the matrixX be calculated just to validate. Which
+        //       means that it will have to be done twice when actually
+        //       performing the "real" action later.
+        int matrixX = this.translateImageXToMatrixX(imageX);
+        return matrixX >= 0 && matrixX < this.mazeWidth - 1;
+    }
+
+    public boolean isValidImageY(int imageY) {
+        // TODO: Don't flipping do this, it is massively redundant since it
+        //       requires that the matrixY be calculated just to validate. Which
+        //       means that it will have to be done twice when actually
+        //       performing the "real" action later.
+        int matrixY = this.translateImageYToMatrixY(imageY);
+        return matrixY >= 0 && matrixY < this.mazeHeight - 1;
     }
 
     /**
@@ -178,6 +223,10 @@ public class MazeReader {
      */
     public int translateMatrixYToImageY(int matrixY) {
         return this.translateMatrixYToImageY(matrixY, Direction.Center);
+    }
+
+    public BufferedImage getBackingImage() {
+        return this.backingImage;
     }
 
     /**
