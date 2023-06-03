@@ -2,9 +2,11 @@ package com.dt183g.project;
 
 import com.dt183g.project.mvc.controllers.MazeController;
 import com.dt183g.project.mvc.controllers.MazeControllerOBS;
+import com.dt183g.project.mvc.models.algorithms.DijkstrasQueue;
 import com.dt183g.project.utility.FileReader;
 
 import javax.swing.SwingUtilities;
+import java.awt.Point;
 
 public class Main {
     public static void main(String... args) {

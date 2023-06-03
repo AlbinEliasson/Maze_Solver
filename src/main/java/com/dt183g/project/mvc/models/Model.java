@@ -1,5 +1,9 @@
 package com.dt183g.project.mvc.models;
 
+import com.dt183g.project.mvc.models.algorithms.AStar;
+import com.dt183g.project.mvc.models.algorithms.DijkstrasMinHeap;
+import com.dt183g.project.mvc.models.algorithms.DijkstrasQueue;
+import com.dt183g.project.mvc.models.algorithms.MazeAlgorithm;
 import com.dt183g.project.mvc.observer.Observed;
 
 import java.awt.Point;
@@ -12,14 +16,16 @@ abstract public class Model extends Observed {
     public static final String MODEL_SOLVE_COMPLETE_EVENT = "MODEL_SOLVE_COMPLETE_EVENT";
 
     public enum Algorithm {
-        DijkstrasQueue("Dijkstra's Algorithm: Queue"),
-        DijkstrasMinHeap("Dijkstra's Algorithm: Min Heap"),
-        AStar("A* Algorithm");
+        DijkstrasQueue("Dijkstra's Algorithm: Queue", new DijkstrasQueue()),
+        DijkstrasMinHeap("Dijkstra's Algorithm: Min Heap", new DijkstrasMinHeap()),
+        AStar("A* Algorithm", new AStar());
 
         public final String label;
+        public final MazeAlgorithm solver;
 
-        Algorithm(String label) {
+        Algorithm(String label, MazeAlgorithm solver) {
             this.label = label;
+            this.solver = solver;
         }
 
         @Override

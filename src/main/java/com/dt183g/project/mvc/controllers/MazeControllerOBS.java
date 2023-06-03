@@ -115,6 +115,7 @@ public class MazeControllerOBS extends Controller {
      */
     @Override
     public void handleModelSolveCompleteEvent(List<Point> path) {
-        System.out.printf("[CONTROLLER] %s handler triggered BUT NOT IMPLEMENTED!\n", Model.MODEL_SOLVE_COMPLETE_EVENT);
+        System.out.printf("[CONTROLLER] %s handler triggered!\n", Model.MODEL_SOLVE_COMPLETE_EVENT);
+        this.view.setPath(path);
     }
 }

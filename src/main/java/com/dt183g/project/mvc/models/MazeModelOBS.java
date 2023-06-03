@@ -4,6 +4,8 @@ import com.dt183g.project.utility.MazeReader;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MazeModelOBS extends Model {
     private final MazeReader mazeReader;
@@ -23,8 +25,25 @@ public class MazeModelOBS extends Model {
 
     @Override
     public void solve() {
-        System.out.print("[MODEL] SOLVE METHOD NOT IMPLEMENTED!\n");
-        // TODO: Find path and push event.
+        // TODO: Validate algorithm, start/end locations.
+
+        System.out.printf("[MODEL] Solving maze!\n\tAlgorithm: %s\n\tStart X: %s\n\tStart Y: %s\n\tEnd X: %s\n\tEnd Y: %s\n",
+                this.currentAlgorithm, this.startLocation.x, this.startLocation.y, this.endLocation.x, this.endLocation.y);
+
+        List<Point> path = this.currentAlgorithm.solver.solve(
+                this.mazeReader.getMazeMatrix(),
+                new Point(this.mazeReader.translateImageXToMatrixX(this.startLocation.x), this.mazeReader.translateImageYToMatrixY(this.startLocation.y)), // TODO: Dont do this, make it better.
+                new Point(this.mazeReader.translateImageXToMatrixX(this.endLocation.x), this.mazeReader.translateImageYToMatrixY(this.endLocation.y))); // TODO: Dont do this, make it better.
+
+        if(path != null) {
+            this.pushSolveCompleteEvent(path.stream().peek(p -> {
+                p.x = this.mazeReader.translateMatrixXToImageX(p.x);
+                p.y = this.mazeReader.translateMatrixYToImageY(p.y);
+            }).collect(Collectors.toList()));
+        } else {
+            System.out.print("[MODEL] UNABLE TO FIND PATH!\n");
+            // TODO: Handle solve failiure
+        }
     }
 
     @Override
