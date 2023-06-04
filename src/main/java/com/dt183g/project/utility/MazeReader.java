@@ -1,5 +1,7 @@
 package com.dt183g.project.utility;
 
+import com.dt183g.project.mvc.models.types.MazePoint;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -86,6 +88,10 @@ public class MazeReader {
         return new MazeReader(ImageIO.read(Objects.requireNonNull(MazeReader.class.getResource("/" + file))));
     }
 
+    public BufferedImage getBackingImage() {
+        return this.backingImage;
+    }
+
     public int[][] getMazeMatrix() {
         // TODO: Return copy of matrix instead.
         return this.mazeMatrix;
@@ -94,6 +100,30 @@ public class MazeReader {
     public int getCell(int x, int y) {
         // TODO: Validate to make safe.
         return this.mazeMatrix[x][y];
+    }
+
+    public int getMatrixWidth() {
+        return this.mazeWidth;
+    }
+
+    public int getMatrixHeight() {
+        return this.mazeHeight;
+    }
+
+    public int getImageWidth() {
+        return this.imageWidth;
+    }
+
+    public int getImageHeight() {
+        return this.imageHeight;
+    }
+
+    public MazePoint pointFromMaze(int x, int y) {
+        return MazePoint.fromMaze(x, y, this);
+    }
+
+    public MazePoint pointFromImage(int x, int y) {
+        return MazePoint.fromImage(x, y, this);
     }
 
     /**
@@ -223,10 +253,6 @@ public class MazeReader {
      */
     public int translateMatrixYToImageY(int matrixY) {
         return this.translateMatrixYToImageY(matrixY, Direction.Center);
-    }
-
-    public BufferedImage getBackingImage() {
-        return this.backingImage;
     }
 
     /**

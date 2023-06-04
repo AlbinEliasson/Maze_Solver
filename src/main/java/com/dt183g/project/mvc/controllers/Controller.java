@@ -1,8 +1,10 @@
 package com.dt183g.project.mvc.controllers;
 
 import com.dt183g.project.mvc.models.Model;
+import com.dt183g.project.mvc.models.types.MazePoint;
 import com.dt183g.project.mvc.observer.Observer;
 import com.dt183g.project.mvc.views.View;
+import com.dt183g.project.mvc.views.gui.Maze;
 
 import java.awt.Point;
 import java.util.Arrays;
@@ -26,7 +28,7 @@ abstract public class Controller implements Observer {
             case View.VIEW_RESET_EVENT -> handleViewResetEvent();
             case Model.MODEL_UPDATE_START_LOCATION_EVENT -> handleModelUpdateStartLocationEvent((Point) data[0]);
             case Model.MODEL_UPDATE_END_LOCATION_EVENT -> handleModelUpdateEndLocationEvent((Point) data[0]);
-            case Model.MODEL_SOLVE_COMPLETE_EVENT -> handleModelSolveCompleteEvent((List<Point>) data[0]);
+            case Model.MODEL_SOLVE_COMPLETE_EVENT -> handleModelSolveCompleteEvent((List<MazePoint>) data[0]);
             default -> System.out.printf("[CONTROLLER] Unhandled event \"%s\": %s\n", eventName, Arrays.toString(data));
         }
     }
@@ -84,5 +86,5 @@ abstract public class Controller implements Observer {
      *
      * @param path The generated path.
      */
-    abstract public void handleModelSolveCompleteEvent(List<Point> path);
+    abstract public void handleModelSolveCompleteEvent(List<MazePoint> path);
 }

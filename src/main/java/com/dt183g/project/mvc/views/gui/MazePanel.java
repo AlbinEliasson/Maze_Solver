@@ -1,5 +1,7 @@
 package com.dt183g.project.mvc.views.gui;
 
+import com.dt183g.project.mvc.models.types.MazePoint;
+
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,7 +13,7 @@ import java.util.List;
 public class MazePanel extends JPanel {
     private final BufferedImage mazeImage;
 
-    private List<Point> path;
+    private List<MazePoint> path;
     private Point startLocation;
     private Point endLocation;
 
@@ -31,9 +33,9 @@ public class MazePanel extends JPanel {
         if(this.path != null && !this.path.isEmpty()){
             graphics.setColor(Color.BLUE);
             for(int i = 0; i < this.path.size() - 1; i++) {
-                Point current = this.path.get(i);
-                Point next = this.path.get(i + 1);
-                graphics.fillRect(current.x, current.y, next.x - current.x + 1, next.y - current.y + 1);
+                MazePoint current = this.path.get(i);
+                MazePoint next = this.path.get(i + 1);
+                graphics.fillRect(current.getImageX(), current.getImageY(), next.getImageX() - current.getImageX() + 1, next.getImageY() - current.getImageY() + 1);
             }
         }
         if(this.startLocation != null) {
@@ -60,7 +62,7 @@ public class MazePanel extends JPanel {
         this.refresh();
     }
 
-    public void setPath(List<Point> path) {
+    public void setPath(List<MazePoint> path) {
         this.path = path;
         this.refresh();
     }

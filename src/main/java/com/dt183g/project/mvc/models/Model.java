@@ -4,6 +4,7 @@ import com.dt183g.project.mvc.models.algorithms.AStar;
 import com.dt183g.project.mvc.models.algorithms.DijkstrasMinHeap;
 import com.dt183g.project.mvc.models.algorithms.DijkstrasQueue;
 import com.dt183g.project.mvc.models.algorithms.MazeAlgorithm;
+import com.dt183g.project.mvc.models.types.MazePoint;
 import com.dt183g.project.mvc.observer.Observed;
 
 import java.awt.Point;
@@ -47,7 +48,7 @@ abstract public class Model extends Observed {
         this.pushEvent(MODEL_UPDATE_END_LOCATION_EVENT, location);
     }
 
-    public void pushSolveCompleteEvent(List<Point> path) {
+    public void pushSolveCompleteEvent(List<MazePoint> path) {
         this.pushEvent(MODEL_SOLVE_COMPLETE_EVENT, path);
     }
 

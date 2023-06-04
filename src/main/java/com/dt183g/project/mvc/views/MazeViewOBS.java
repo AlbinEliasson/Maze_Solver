@@ -1,6 +1,7 @@
 package com.dt183g.project.mvc.views;
 
 import com.dt183g.project.mvc.models.Model;
+import com.dt183g.project.mvc.models.types.MazePoint;
 import com.dt183g.project.mvc.views.gui.MazeMenuPanel;
 import com.dt183g.project.mvc.views.gui.MazePanel;
 
@@ -104,7 +105,7 @@ public class MazeViewOBS extends View {
      * @param path List of points in the path.
      */
     @Override
-    public void setPath(List<Point> path) {
+    public void setPath(List<MazePoint> path) {
         System.out.printf("[VIEW] Setting path! Path: %s\n", Arrays.toString(path.toArray()));
         this.mazePanel.setPath(path);
     }

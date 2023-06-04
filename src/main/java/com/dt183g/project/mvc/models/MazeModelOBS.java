@@ -1,5 +1,7 @@
 package com.dt183g.project.mvc.models;
 
+import com.dt183g.project.mvc.models.types.MazePoint;
+import com.dt183g.project.mvc.models.types.MazeVertex;
 import com.dt183g.project.utility.MazeReader;
 
 import java.awt.Point;
@@ -30,19 +32,18 @@ public class MazeModelOBS extends Model {
         System.out.printf("[MODEL] Solving maze!\n\tAlgorithm: %s\n\tStart X: %s\n\tStart Y: %s\n\tEnd X: %s\n\tEnd Y: %s\n",
                 this.currentAlgorithm, this.startLocation.x, this.startLocation.y, this.endLocation.x, this.endLocation.y);
 
-        List<Point> path = this.currentAlgorithm.solver.solve(
+        List<MazePoint> path = this.currentAlgorithm.solver.solve(
                 this.mazeReader.getMazeMatrix(),
-                new Point(this.mazeReader.translateImageXToMatrixX(this.startLocation.x), this.mazeReader.translateImageYToMatrixY(this.startLocation.y)), // TODO: Dont do this, make it better.
-                new Point(this.mazeReader.translateImageXToMatrixX(this.endLocation.x), this.mazeReader.translateImageYToMatrixY(this.endLocation.y))); // TODO: Dont do this, make it better.
+                MazePoint.fromImage(startLocation.x, startLocation.y, mazeReader), // TODO: Dont do this, make it better.
+                MazePoint.fromImage(endLocation.x, endLocation.y, mazeReader)); // TODO: Dont do this, make it better.
+
+
 
         if(path != null) {
-            this.pushSolveCompleteEvent(path.stream().peek(p -> {
-                p.x = this.mazeReader.translateMatrixXToImageX(p.x);
-                p.y = this.mazeReader.translateMatrixYToImageY(p.y);
-            }).collect(Collectors.toList()));
+            this.pushSolveCompleteEvent(path);
         } else {
             System.out.print("[MODEL] UNABLE TO FIND PATH!\n");
-            // TODO: Handle solve failiure
+            // TODO: Handle solve failure
         }
     }
 

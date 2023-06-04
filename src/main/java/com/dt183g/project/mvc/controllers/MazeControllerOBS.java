@@ -2,6 +2,7 @@ package com.dt183g.project.mvc.controllers;
 
 import com.dt183g.project.mvc.models.MazeModelOBS;
 import com.dt183g.project.mvc.models.Model;
+import com.dt183g.project.mvc.models.types.MazePoint;
 import com.dt183g.project.mvc.views.MazeViewOBS;
 import com.dt183g.project.mvc.views.View;
 
@@ -114,7 +115,7 @@ public class MazeControllerOBS extends Controller {
      * @param path The generated path.
      */
     @Override
-    public void handleModelSolveCompleteEvent(List<Point> path) {
+    public void handleModelSolveCompleteEvent(List<MazePoint> path) {
         System.out.printf("[CONTROLLER] %s handler triggered!\n", Model.MODEL_SOLVE_COMPLETE_EVENT);
         this.view.setPath(path);
     }

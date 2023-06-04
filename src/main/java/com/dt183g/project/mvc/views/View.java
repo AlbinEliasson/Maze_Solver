@@ -1,6 +1,7 @@
 package com.dt183g.project.mvc.views;
 
 import com.dt183g.project.mvc.models.Model;
+import com.dt183g.project.mvc.models.types.MazePoint;
 import com.dt183g.project.mvc.observer.Observed;
 
 import java.awt.Point;
@@ -81,7 +82,7 @@ abstract public class View extends Observed {
      *
      * @param path List of points in the path.
      */
-    abstract public void setPath(List<Point> path);
+    abstract public void setPath(List<MazePoint> path);
 
     /**
      * Method for resetting the maze image, nullifying the starting and ending
