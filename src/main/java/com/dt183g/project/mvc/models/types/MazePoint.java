@@ -2,11 +2,25 @@ package com.dt183g.project.mvc.models.types;
 
 import com.dt183g.project.utility.MazeReader;
 
+/**
+ * A class representing a point in the maze.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
 public class MazePoint {
     protected MazeReader maze;
     protected int mazeX;
     protected int mazeY;
 
+    /**
+     * Internal constructor for instantiating a new point.
+     *
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param maze The backing maze to which the point corresponds.
+     * @param isImageCoordinates Whether the coordinates are image coordinates
+     *                           or maze matrix coordinates.
+     */
     protected MazePoint(int x, int y, MazeReader maze, boolean isImageCoordinates) {
         this.maze = maze;
         if(isImageCoordinates) {
@@ -18,18 +32,46 @@ public class MazePoint {
         }
     }
 
+    /**
+     * Method for creating a new point using matrix coordinates.
+     *
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param maze The backing maze.
+     *
+     * @return A new point.
+     */
     public static MazePoint fromMaze(int x, int y, MazeReader maze) {
         return new MazePoint(x, y, maze, false);
     }
 
+    /**
+     * Method for creating a new point using image coordinates.
+     *
+     * @param x The x coordinate.
+     * @param y The y coordinate.
+     * @param maze The backing maze.
+     *
+     * @return A new point.
+     */
     public static MazePoint fromImage(int x, int y, MazeReader maze) {
         return new MazePoint(x, y, maze, true);
     }
 
+    /**
+     * Method for getting the point's x coordinate for the maze matrix.
+     *
+     * @return The matrix x coordinate.
+     */
     public int getMazeX() {
         return this.mazeX;
     }
 
+    /**
+     * Method for setting the point's x coordinate using a maze matrix value.
+     *
+     * @param x The matrix x coordinate.
+     */
     public void setMazeX(int x) {
         if(x < 0 || x > maze.getMatrixWidth() - 1)
             throw new IndexOutOfBoundsException(String.format("Attempted to set maze X to %s, allowed range 0 - %s.", x, maze.getMatrixWidth() - 1));
@@ -37,14 +79,32 @@ public class MazePoint {
         this.mazeX = x;
     }
 
+    /**
+     * Method for getting the point's x coordinate for the maze image.
+     *
+     * @param direction The section of the cell on the image to point coordinate
+     *                  to.
+     *
+     * @return The image x coordinate.
+     */
     public int getImageX(MazeReader.Direction direction) {
         return maze.translateMatrixXToImageX(this.mazeX, direction);
     }
 
+    /**
+     * Method for getting the point's x coordinate for the maze image.
+     *
+     * @return The image x coordinate.
+     */
     public int getImageX() {
         return maze.translateMatrixXToImageX(this.mazeX);
     }
 
+    /**
+     * Method for setting the point's x coordinate using a maze image value.
+     *
+     * @param x The image x coordinate.
+     */
     public void setImageX(int x) {
         if(x < 0 || x > maze.getImageWidth() - 1)
             throw new IndexOutOfBoundsException(String.format("Attempted to set image X to %s, allowed range 0 - %s.", x, maze.getImageWidth() - 1));
@@ -52,10 +112,20 @@ public class MazePoint {
         this.mazeX = maze.translateImageXToMatrixX(x);
     }
 
+    /**
+     * Method for getting the point's y coordinate for the maze matrix.
+     *
+     * @return The matrix y coordinate.
+     */
     public int getMazeY() {
         return this.mazeY;
     }
 
+    /**
+     * Method for setting the point's y coordinate using a maze matrix value.
+     *
+     * @param y The matrix y coordinate.
+     */
     public void setMazeY(int y) {
         if(y < 0 || y > maze.getMatrixHeight() - 1)
             throw new IndexOutOfBoundsException(String.format("Attempted to set maze Y to %s, allowed range 0 - %s.", y, maze.getMatrixHeight() - 1));
@@ -63,14 +133,32 @@ public class MazePoint {
         this.mazeY = y;
     }
 
+    /**
+     * Method for getting the point's y coordinate for the maze image.
+     *
+     * @param direction The section of the cell on the image to point coordinate
+     *                  to.
+     *
+     * @return The image y coordinate.
+     */
     public int getImageY(MazeReader.Direction direction) {
         return maze.translateMatrixYToImageY(this.mazeY, direction);
     }
 
+    /**
+     * Method for getting the point's y coordinate for the maze image.
+     *
+     * @return The image y coordinate.
+     */
     public int getImageY() {
         return maze.translateMatrixYToImageY(this.mazeY);
     }
 
+    /**
+     * Method for setting the point's y coordinate using a maze image value.
+     *
+     * @param y The image y coordinate.
+     */
     public void setImageY(int y) {
         if(y < 0 || y > maze.getImageHeight() - 1)
             throw new IndexOutOfBoundsException(String.format("Attempted to set image Y to %s, allowed range 0 - %s.", y, maze.getImageHeight() - 1));
