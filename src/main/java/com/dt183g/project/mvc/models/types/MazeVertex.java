@@ -57,7 +57,7 @@ public class MazeVertex extends MazePoint implements Comparable<MazeVertex> {
     }
 
     public static MazeVertex fromPoint(MazePoint point, CompareMode compareMode) {
-        return new MazeVertex(point.getMazeX(), point.getMazeY(), point.getBackingMaze(), false, compareMode);
+        return new MazeVertex(point.getMazeX(), point.getMazeY(), point.maze, false, compareMode);
     }
 
     public static MazeVertex fromPoint(MazePoint point) {

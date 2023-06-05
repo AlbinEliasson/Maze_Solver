@@ -122,15 +122,14 @@ public class DijkstrasMinHeap extends MazeAlgorithm {
                         mazeMatrix[x][y] == 0 &&
                         distances[current.getMazeX()][current.getMazeY()] < distances[x][y]
                 ) {
-                    MazeVertex next2 = MazeVertex.fromMaze(x, y, current.getBackingMaze());
-                    next2.setPrevious(current);
+                    //MazeVertex next2 = MazeVertex.fromMaze(x, y, current.getBackingMaze());
+                    //next2.setPrevious(current);
                     MazeVertex next = current.makeNext(x, y);
                     distances[x][y] = next.getDistance();
 
-                    System.out.printf("ASDDASASD\n\t%s %s %s %s %s\n\t%s %s %s %s %s\n\t%s %s %s %s %s\n",
+                    System.out.printf("ASDDASASD\n\t%s %s %s %s %s\n\t%s %s %s %s %s\n",
                             current.getMazeX(), current.getMazeY(), current.getDistance(), current.getCompareMode(), current.getPrevious(),
-                            next.getMazeX(), next.getMazeY(), next.getDistance(), next.getCompareMode(), next.getPrevious(),
-                            next2.getMazeX(), next2.getMazeY(), next2.getDistance(), next2.getCompareMode(), next2.getPrevious());
+                            next.getMazeX(), next.getMazeY(), next.getDistance(), next.getCompareMode(), next.getPrevious());
 
                     if(x == end.getMazeX() && y == end.getMazeY()) {
                         path = new ArrayList<>();

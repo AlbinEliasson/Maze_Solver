@@ -26,10 +26,6 @@ public class MazePoint {
         return new MazePoint(x, y, maze, true);
     }
 
-    public MazeReader getBackingMaze() {
-        return this.maze;
-    }
-
     public int getMazeX() {
         return this.mazeX;
     }
@@ -107,7 +103,7 @@ public class MazePoint {
         if(!(object instanceof MazePoint point))
             return false;
 
-        return maze == point.getBackingMaze() && mazeX == point.getMazeX() && mazeY == point.getMazeY();
+        return mazeX == point.getMazeX() && mazeY == point.getMazeY();
     }
 
     /**
