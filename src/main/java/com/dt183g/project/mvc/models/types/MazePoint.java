@@ -27,8 +27,8 @@ public class MazePoint {
             this.setImageX(x);
             this.setImageY(y);
         } else {
-            this.setMazeX(x);
-            this.setMazeY(y);
+            this.setX(x);
+            this.setY(y);
         }
     }
 
@@ -63,7 +63,7 @@ public class MazePoint {
      *
      * @return The matrix x coordinate.
      */
-    public int getMazeX() {
+    public int getX() {
         return this.mazeX;
     }
 
@@ -72,7 +72,7 @@ public class MazePoint {
      *
      * @param x The matrix x coordinate.
      */
-    public void setMazeX(int x) {
+    public void setX(int x) {
         if(x < 0 || x > maze.getMatrixWidth() - 1)
             throw new IndexOutOfBoundsException(String.format("Attempted to set maze X to %s, allowed range 0 - %s.", x, maze.getMatrixWidth() - 1));
 
@@ -117,7 +117,7 @@ public class MazePoint {
      *
      * @return The matrix y coordinate.
      */
-    public int getMazeY() {
+    public int getY() {
         return this.mazeY;
     }
 
@@ -126,7 +126,7 @@ public class MazePoint {
      *
      * @param y The matrix y coordinate.
      */
-    public void setMazeY(int y) {
+    public void setY(int y) {
         if(y < 0 || y > maze.getMatrixHeight() - 1)
             throw new IndexOutOfBoundsException(String.format("Attempted to set maze Y to %s, allowed range 0 - %s.", y, maze.getMatrixHeight() - 1));
 
@@ -180,7 +180,7 @@ public class MazePoint {
      * @return The distance between the points.
      */
     public double proximityTo(MazePoint other) {
-        return Math.sqrt((mazeX - other.getMazeX()) ^ 2 + (mazeY - other.getMazeY()) ^ 2);
+        return Math.sqrt((mazeX - other.getX()) ^ 2 + (mazeY - other.getY()) ^ 2);
     }
 
     /**
@@ -191,7 +191,7 @@ public class MazePoint {
         if(!(object instanceof MazePoint point))
             return false;
 
-        return mazeX == point.getMazeX() && mazeY == point.getMazeY();
+        return mazeX == point.getX() && mazeY == point.getY();
     }
 
     /**

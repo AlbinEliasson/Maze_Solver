@@ -103,7 +103,7 @@ public class DijkstrasMinHeap extends MazeAlgorithm {
             Arrays.fill(sub, Integer.MAX_VALUE);
 
         List<MazePoint> path = null;
-        distances[start.getMazeX()][start.getMazeY()] = start.getDistance();
+        distances[start.getX()][start.getY()] = start.getDistance();
         vertexes.add(start);
 
         int[] xDirections = {-1, 0, 1, 0};
@@ -113,14 +113,14 @@ public class DijkstrasMinHeap extends MazeAlgorithm {
             MazeVertex current = vertexes.remove();
 
             for(int i = 0; i < xDirections.length; i++) {
-                int x = current.getMazeX() + xDirections[i];
-                int y = current.getMazeY() + yDirections[i];
+                int x = current.getX() + xDirections[i];
+                int y = current.getY() + yDirections[i];
 
                 if(
                         x >= 0 && x < mazeMatrix.length &&
                         y >= 0 && y < mazeMatrix[0].length &&
                         mazeMatrix[x][y] == 0 &&
-                        distances[current.getMazeX()][current.getMazeY()] < distances[x][y]
+                        distances[current.getX()][current.getY()] < distances[x][y]
                 ) {
                     //MazeVertex next2 = MazeVertex.fromMaze(x, y, current.getBackingMaze());
                     //next2.setPrevious(current);
@@ -128,10 +128,10 @@ public class DijkstrasMinHeap extends MazeAlgorithm {
                     distances[x][y] = next.getDistance();
 
                     System.out.printf("ASDDASASD\n\t%s %s %s %s %s\n\t%s %s %s %s %s\n",
-                            current.getMazeX(), current.getMazeY(), current.getDistance(), current.getCompareMode(), current.getPrevious(),
-                            next.getMazeX(), next.getMazeY(), next.getDistance(), next.getCompareMode(), next.getPrevious());
+                            current.getX(), current.getY(), current.getDistance(), current.getCompareMode(), current.getPrevious(),
+                            next.getX(), next.getY(), next.getDistance(), next.getCompareMode(), next.getPrevious());
 
-                    if(x == end.getMazeX() && y == end.getMazeY()) {
+                    if(x == end.getX() && y == end.getY()) {
                         path = new ArrayList<>();
 
                         while(next != null) {

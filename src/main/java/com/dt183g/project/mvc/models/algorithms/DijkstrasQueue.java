@@ -100,7 +100,7 @@ public class DijkstrasQueue extends MazeAlgorithm {
             Arrays.fill(part, Integer.MAX_VALUE);
 
         List<MazePoint> path = null;
-        distances[start.getMazeX()][start.getMazeY()] = start.getDistance();
+        distances[start.getX()][start.getY()] = start.getDistance();
         vertexes.add(start);
 
         int[] xDirections = {-1, 0, 1, 0};
@@ -110,21 +110,21 @@ public class DijkstrasQueue extends MazeAlgorithm {
             MazeVertex current = vertexes.remove();
 
             for(int i = 0; i < xDirections.length; i++) {
-                int x = current.getMazeX() + xDirections[i];
-                int y = current.getMazeY() + yDirections[i];
+                int x = current.getX() + xDirections[i];
+                int y = current.getY() + yDirections[i];
 
                 if(
                         x >= 0 && x < mazeMatrix.length &&
                         y >= 0 && y < mazeMatrix[0].length &&
                         mazeMatrix[x][y] == 0 &&
-                        distances[current.getMazeX()][current.getMazeY()] + 1 < distances[x][y]
+                        distances[current.getX()][current.getY()] + 1 < distances[x][y]
                 ) {
                     //MazeVertex next = MazeVertex.fromMaze(x, y, current.getBackingMaze());
                     //next.setPrevious(current);
                     MazeVertex next = current.makeNext(x, y, end);
-                    distances[x][y] = distances[current.getMazeX()][current.getMazeY()] + 1;
+                    distances[x][y] = distances[current.getX()][current.getY()] + 1;
 
-                    if(x == end.getMazeX() && y == end.getMazeY()) {
+                    if(x == end.getX() && y == end.getY()) {
                         path = new ArrayList<>();
 
                         while(next != null) {

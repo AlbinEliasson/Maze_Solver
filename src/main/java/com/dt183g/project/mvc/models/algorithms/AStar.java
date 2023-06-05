@@ -121,7 +121,7 @@ public class AStar extends MazeAlgorithm {
 
         List<MazePoint> path = null;
         start.setDirectDistanceUsing(end);
-        distances[start.getMazeX()][start.getMazeY()] = start.getDistance();
+        distances[start.getX()][start.getY()] = start.getDistance();
         vertexes.add(start);
 
         int[] xDirections = {-1, 0, 1, 0};
@@ -131,8 +131,8 @@ public class AStar extends MazeAlgorithm {
             MazeVertex current = vertexes.remove();
 
             for(int i = 0; i < xDirections.length; i++) {
-                int x = current.getMazeX() + xDirections[i];
-                int y = current.getMazeY() + yDirections[i];
+                int x = current.getX() + xDirections[i];
+                int y = current.getY() + yDirections[i];
 
                 if(
                         x >= 0 && x < mazeMatrix.length &&
@@ -143,7 +143,7 @@ public class AStar extends MazeAlgorithm {
                     MazeVertex next = current.makeNext(x, y, end);
                     distances[x][y] = next.getDistance();
 
-                    if(x == end.getMazeX() && y == end.getMazeY()) {
+                    if(x == end.getX() && y == end.getY()) {
                         path = new ArrayList<>();
 
                         while(next != null) {
