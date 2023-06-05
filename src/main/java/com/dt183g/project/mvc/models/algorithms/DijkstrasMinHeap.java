@@ -19,7 +19,7 @@ public class DijkstrasMinHeap extends MazeAlgorithm {
      * @param endLocation   The end location.
      * @return The path as a list of points.
      */
-    @Override
+    /*@Override
     public List<Point> solve(int[][] mazeMatrix, Point startLocation, Point endLocation) {
         System.out.print("[MODEL] Running Dijkstras Min Heap algorithm!\n");
 
@@ -78,7 +78,7 @@ public class DijkstrasMinHeap extends MazeAlgorithm {
         }
 
         return null;
-    }
+    }*/
 
     @Override
     public List<MazePoint> solve(int[][] mazeMatrix, MazePoint startLocation, MazePoint endLocation) {

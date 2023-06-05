@@ -37,8 +37,6 @@ public class MazeModelOBS extends Model {
                 MazePoint.fromImage(startLocation.x, startLocation.y, mazeReader), // TODO: Dont do this, make it better.
                 MazePoint.fromImage(endLocation.x, endLocation.y, mazeReader)); // TODO: Dont do this, make it better.
 
-
-
         if(path != null) {
             this.pushSolveCompleteEvent(path);
         } else {

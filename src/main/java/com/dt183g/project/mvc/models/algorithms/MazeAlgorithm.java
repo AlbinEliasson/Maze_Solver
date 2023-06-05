@@ -16,10 +16,7 @@ abstract public class MazeAlgorithm {
      *
      * @return The path as a list of points.
      */
-    abstract public List<Point> solve(int[][] mazeMatrix, Point startLocation, Point endLocation);
-    public List<MazePoint> solve(int[][] mazeMatrix, MazePoint startLocation, MazePoint endLocation) {
-        return null;
-    }
+    abstract public List<MazePoint> solve(int[][] mazeMatrix, MazePoint startLocation, MazePoint endLocation);
 
     /**
      * Helper method for dumping the current state of a currently running maze

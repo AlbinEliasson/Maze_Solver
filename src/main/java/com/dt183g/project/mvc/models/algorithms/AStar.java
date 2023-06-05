@@ -19,7 +19,7 @@ public class AStar extends MazeAlgorithm {
      * @param endLocation   The end location.
      * @return The path as a list of points.
      */
-    @Override
+    /*@Override
     public List<Point> solve(int[][] mazeMatrix, Point startLocation, Point endLocation) {
         System.out.printf("[MODEL] Running A* algorithm!\n");
 
@@ -95,7 +95,7 @@ public class AStar extends MazeAlgorithm {
     private double whatThisDo(int x, int y, int endX, int endY) {
         return Math.sqrt((y - endY) * (y - endY) + (x - endX) * (x - endX));
         //return Math.sqrt((y - endY) ^ 2 + (x - endX) ^ 2);
-    }
+    }*/
 
     @Override
     public List<MazePoint> solve(int[][] mazeMatrix, MazePoint startLocation, MazePoint endLocation) {
