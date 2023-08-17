@@ -2,6 +2,11 @@ package com.dt183g.project.mvc.observer;
 
 import java.util.ArrayList;
 
+/**
+ * Abstract class implementing the "subject" in the Observer Pattern.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
 public abstract class Observed {
     private final ArrayList<Observer> observers = new ArrayList<>();
 

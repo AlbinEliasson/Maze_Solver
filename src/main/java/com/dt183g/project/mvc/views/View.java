@@ -7,6 +7,11 @@ import com.dt183g.project.mvc.observer.Observed;
 import java.awt.Point;
 import java.util.List;
 
+/**
+ * Abstract class used as the top-level super class of all views.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
 abstract public class View extends Observed {
     public static final String VIEW_SET_ALGORITHM_EVENT = "VIEW_SET_ALGORITHM_EVENT";
     public static final String VIEW_SET_SELECT_STATE_START_EVENT = "VIEW_SET_SELECT_STATE_START_EVENT";

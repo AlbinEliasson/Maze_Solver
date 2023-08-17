@@ -16,7 +16,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+/**
+ * Class implementing a reader for the maze image; used to convert the maze
+ * image to an int-matrix representation used for solving.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
 public class MazeReader {
+    // This is temporary.
     private class DrawInfo {
         public int x;
         public int y;
@@ -33,26 +40,36 @@ public class MazeReader {
     }
     private List<DrawInfo> tmpDraw = new ArrayList<>();
 
+    // How many points on each size of the maze to probe when attempting to find
+    // the border thickness, offset and block size.
     private static final int PROBE_FACTOR = 8;
 
+    // The backing maze image
     private final BufferedImage backingImage;
 
+    // The size of the image itself.
     private final int imageHeight;
     private final int imageWidth;
 
+    // Offset is the space between the start/end of the image and the outer
+    // border of the maze in the image.
     private int offsetStartX;
     private int offsetEndX;
     private int offsetStartY;
     private int offsetEndY;
 
+    // The border thickness is the size of the walls between cells in the maze.
     private int borderThickness;
 
+    // A "block" is the size of a single cell in the image.
     private int blockWidth;
     private int blockHeight;
 
+    // The maze size is the size of the maze matrix representation.
     private int mazeWidth;
     private int mazeHeight;
 
+    // 0 = Open cell, 1 = Normal wall
     private int[][] mazeMatrix;
 
     /**
@@ -88,40 +105,91 @@ public class MazeReader {
         return new MazeReader(ImageIO.read(Objects.requireNonNull(MazeReader.class.getResource("/" + file))));
     }
 
+    /**
+     * Method for getting the backing image.
+     *
+     * @return The backing image.
+     */
     public BufferedImage getBackingImage() {
         return this.backingImage;
     }
 
+    /**
+     * Method for getting the raw maze matrix.
+     *
+     * @return The maze matrix.
+     */
     public int[][] getMazeMatrix() {
         // TODO: Return copy of matrix instead.
         return this.mazeMatrix;
     }
 
+    /**
+     * Method for getting the value in a specific cell.
+     *
+     * @param x The (matrix) x-coordinate.
+     * @param y The (matrix) y-coordinate.
+     * @return The value of the cell.
+     */
     public int getCell(int x, int y) {
         // TODO: Validate to make safe.
         return this.mazeMatrix[x][y];
     }
 
+    /**
+     * Method for getting the width of the maze matrix.
+     *
+     * @return The width of the matrix.
+     */
     public int getMatrixWidth() {
         return this.mazeWidth;
     }
 
+    /**
+     * Method for getting the height of the maze matrix.
+     *
+     * @return The height of the matrix.
+     */
     public int getMatrixHeight() {
         return this.mazeHeight;
     }
 
+    /**
+     * Method for getting the width of the backing image.
+     *
+     * @return The width of the image.
+     */
     public int getImageWidth() {
         return this.imageWidth;
     }
 
+    /**
+     * Method for getting the height of the backing image.
+     *
+     * @return The height of the image.
+     */
     public int getImageHeight() {
         return this.imageHeight;
     }
 
+    /**
+     * Method for getting a location in the maze as a MazePoint object.
+     *
+     * @param x The (matrix) x-coordinate.
+     * @param y The (matrix) y-coordinate.
+     * @return The MazePoint object.
+     */
     public MazePoint pointFromMaze(int x, int y) {
         return MazePoint.fromMaze(x, y, this);
     }
 
+    /**
+     * Method for getting a location on the image as a MazePoint object.
+     *
+     * @param x The (image) x-coordinate.
+     * @param y The (image) y-coordinate.
+     * @return The MazePoint object.
+     */
     public MazePoint pointFromImage(int x, int y) {
         return MazePoint.fromImage(x, y, this);
     }
@@ -159,24 +227,59 @@ public class MazeReader {
         return ((imageY - this.offsetStartY) / (this.blockHeight + this.borderThickness)) * 2 + ((imageY - this.offsetStartY) % (this.blockHeight + this.borderThickness) == 0 ? 0 : 1);
     }
 
+    /**
+     * Method for normalizing a (image) x-coordinate to a specific directing in
+     * the closest cell.
+     *
+     * @param imageX The (image) x-coordinate.
+     * @param direction The section of the cell to normalize to.
+     * @return The normalized x-coordinate.
+     */
     public int normalizeImageX(int imageX, Direction direction) {
         // TODO: Maybe redo this, it feels inefficient.
         return this.translateMatrixXToImageX(this.translateImageXToMatrixX(imageX), direction);
     }
 
+    /**
+     * Method for normalizing a (image) x-coordinate to the closest cell.
+     *
+     * @param imageX The (image) x-coordinate.
+     * @return The normalized x-coordinate.
+     */
     public int normalizeImageX(int imageX) {
         return this.normalizeImageX(imageX, Direction.Center);
     }
 
+    /**
+     * Method for normalizing a (image) y-coordinate to a specific directing in
+     * the closest cell.
+     *
+     * @param imageY The (image) y-coordinate.
+     * @param direction The section of the cell to normalize to.
+     * @return The normalized y-coordinate.
+     */
     public int normalizeImageY(int imageY, Direction direction) {
         // TODO: Maybe redo this, it feels inefficient.
         return this.translateMatrixYToImageY(this.translateImageYToMatrixY(imageY), direction);
     }
 
+    /**
+     * Method for normalizing a (image) y-coordinate to the closest cell.
+     *
+     * @param imageY The (image) y-coordinate.
+     * @return The normalized y-coordinate.
+     */
     public int normalizeImageY(int imageY) {
         return this.normalizeImageY(imageY, Direction.Center);
     }
 
+    /**
+     * Method for validating that an (image) x-coordinate in withing a valid
+     * maze cell.
+     *
+     * @param imageX The (image) x-coordinate.
+     * @return Whether the location is inside a cell.
+     */
     public boolean isValidImageX(int imageX) {
         // TODO: Don't flipping do this, it is massively redundant since it
         //       requires that the matrixX be calculated just to validate. Which
@@ -186,6 +289,13 @@ public class MazeReader {
         return matrixX >= 0 && matrixX < this.mazeWidth - 1;
     }
 
+    /**
+     * Method for validating that an (image) y-coordinate in withing a valid
+     * maze cell.
+     *
+     * @param imageY The (image) y-coordinate.
+     * @return Whether the location is inside a cell.
+     */
     public boolean isValidImageY(int imageY) {
         // TODO: Don't flipping do this, it is massively redundant since it
         //       requires that the matrixY be calculated just to validate. Which
@@ -494,15 +604,18 @@ public class MazeReader {
                     //       it also checks the square to the left. If it is a wall, then the square is set to a wall,
                     //       which negates the problem, for now.
                     if(!this.isBorderColor(this.backingImage.getRGB(actualX - 1, actualY))) {
+                        // 0 represents an open cell.
                         this.mazeMatrix[x][y] = 0;
                         tmpDraw.add(new DrawInfo(actualX - 1, actualY - 1, 3, 3, new Color(0, 255, 0, 255)));
                         //tmpDraw.add(new DrawInfo(actualX, actualY, 1, 1, new Color(0, 255, 0, 255)));
                     } else {
+                        // 1 represents a normal "wall".
                         this.mazeMatrix[x][y] = 1;
                         tmpDraw.add(new DrawInfo(actualX - 1, actualY - 1, 3, 3, new Color(0, 0, 255, 255)));
                         //tmpDraw.add(new DrawInfo(actualX, actualY, 1, 1, new Color(0, 0, 255, 255)));
                     }
                 } else {
+                    // 1 represents a normal "wall".
                     this.mazeMatrix[x][y] = 1;
                     tmpDraw.add(new DrawInfo(actualX - 1, actualY - 1, 3, 3, new Color(255, 0, 0, 255)));
                     //tmpDraw.add(new DrawInfo(actualX, actualY, 1, 1, new Color(255, 0, 0, 255)));

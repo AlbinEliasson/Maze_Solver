@@ -1,14 +1,17 @@
 package com.dt183g.project.mvc.models;
 
 import com.dt183g.project.mvc.models.types.MazePoint;
-import com.dt183g.project.mvc.models.types.MazeVertex;
 import com.dt183g.project.utility.MazeReader;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.stream.Collectors;
 
+/**
+ * Class implementing the main model for the application.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
 public class MazeModelOBS extends Model {
     private final MazeReader mazeReader;
 
@@ -25,6 +28,9 @@ public class MazeModelOBS extends Model {
         this.currentAlgorithm = Algorithm.values()[0];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void solve() {
         // TODO: Validate algorithm, start/end locations.
@@ -45,44 +51,68 @@ public class MazeModelOBS extends Model {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         System.out.print("[MODEL] RESET METHOD NOT IMPLEMENTED!\n");
         // TODO: Reset any temporary stuff.
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BufferedImage getMazeImage() {
         return mazeReader.getBackingImage();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Algorithm getAlgorithm() {
         return this.currentAlgorithm;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setAlgorithm(Algorithm algorithm) {
         System.out.printf("[MODEL] Setting algorithm! Algorithm: %s\n", algorithm);
         this.currentAlgorithm = algorithm;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SelectState getSelectState() {
         return this.currentSelectState;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setSelectState(SelectState state) {
         System.out.printf("[MODEL] Setting select state! State: %s\n", state);
         this.currentSelectState = state;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Point getStartLocation() {
         return this.startLocation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setStartLocation(Point location) {
         System.out.printf("[MODEL] Setting start location! X: %s Y: %s\n", location.x, location.y);
@@ -100,11 +130,17 @@ public class MazeModelOBS extends Model {
         this.pushUpdateStartLocationEvent(new Point(this.mazeReader.normalizeImageX(location.x), this.mazeReader.normalizeImageY(location.y)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Point getEndLocation() {
         return this.endLocation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setEndLocation(Point location) {
         System.out.printf("[MODEL] Setting end location! X: %s Y: %s\n", location.x, location.y);

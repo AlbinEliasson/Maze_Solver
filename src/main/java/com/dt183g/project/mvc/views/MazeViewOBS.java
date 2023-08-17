@@ -15,6 +15,11 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class implementing the main view for the application.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
 public class MazeViewOBS extends View {
     private final JFrame windowFrame;
     private final JPanel windowPanel;
@@ -78,9 +83,7 @@ public class MazeViewOBS extends View {
     }
 
     /**
-     * Method for setting the start location displayed upon the maze image.
-     *
-     * @param location The location on the image.
+     * {@inheritDoc}
      */
     @Override
     public void setStartLocation(Point location) {
@@ -89,9 +92,7 @@ public class MazeViewOBS extends View {
     }
 
     /**
-     * Method for setting the end location displayed upon the maze image.
-     *
-     * @param location The location on the image.
+     * {@inheritDoc}
      */
     @Override
     public void setEndLocation(Point location) {
@@ -100,9 +101,7 @@ public class MazeViewOBS extends View {
     }
 
     /**
-     * Method for setting the path displayed upon the maze image.
-     *
-     * @param path List of points in the path.
+     * {@inheritDoc}
      */
     @Override
     public void setPath(List<MazePoint> path) {
@@ -111,8 +110,7 @@ public class MazeViewOBS extends View {
     }
 
     /**
-     * Method for resetting the maze image, nullifying the starting and ending
-     * points, as well as the path.
+     * {@inheritDoc}
      */
     @Override
     public void reset() {

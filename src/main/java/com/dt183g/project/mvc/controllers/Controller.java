@@ -4,12 +4,16 @@ import com.dt183g.project.mvc.models.Model;
 import com.dt183g.project.mvc.models.types.MazePoint;
 import com.dt183g.project.mvc.observer.Observer;
 import com.dt183g.project.mvc.views.View;
-import com.dt183g.project.mvc.views.gui.Maze;
 
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Abstract class used as the top-level super class of all controllers.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
 abstract public class Controller implements Observer {
     /**
      * Method which is triggered by observed objects when an event occurs.

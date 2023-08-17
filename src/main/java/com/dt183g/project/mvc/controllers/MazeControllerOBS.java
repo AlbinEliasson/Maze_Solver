@@ -10,6 +10,11 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+/**
+ * Class implementing the main controller for the application.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
 public class MazeControllerOBS extends Controller {
     private final MazeModelOBS model;
     private final MazeViewOBS view;
@@ -25,9 +30,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling view set algorithm event.
-     *
-     * @param algorithm The new algorithm.
+     * {@inheritDoc}
      */
     @Override
     public void handleViewSetAlgorithmEvent(Model.Algorithm algorithm) {
@@ -36,7 +39,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling view set select state start event.
+     * {@inheritDoc}
      */
     @Override
     public void handleViewSetSelectStateStartEvent() {
@@ -45,7 +48,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling view set select state end event.
+     * {@inheritDoc}
      */
     @Override
     public void handleViewSetSelectStateEndEvent() {
@@ -54,9 +57,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling view select event.
-     *
-     * @param imageLocation Image location.
+     * {@inheritDoc}
      */
     @Override
     public void handleViewSelectEvent(Point imageLocation) {
@@ -69,7 +70,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling view start solve event.
+     * {@inheritDoc}
      */
     @Override
     public void handleViewSolveEvent() {
@@ -78,7 +79,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling view start reset event.
+     * {@inheritDoc}
      */
     @Override
     public void handleViewResetEvent() {
@@ -88,9 +89,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling model update start location event.
-     *
-     * @param location Image location to place marker.
+     * {@inheritDoc}
      */
     @Override
     public void handleModelUpdateStartLocationEvent(Point location) {
@@ -99,9 +98,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling model update end location event.
-     *
-     * @param location Image location to place marker.
+     * {@inheritDoc}
      */
     @Override
     public void handleModelUpdateEndLocationEvent(Point location) {
@@ -110,9 +107,7 @@ public class MazeControllerOBS extends Controller {
     }
 
     /**
-     * Helper method for handling model solve complete event.
-     *
-     * @param path The generated path.
+     * {@inheritDoc}
      */
     @Override
     public void handleModelSolveCompleteEvent(List<MazePoint> path) {
