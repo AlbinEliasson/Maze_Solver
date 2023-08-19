@@ -28,6 +28,8 @@ abstract public class MazeAlgorithm {
      * @param vertexes A list of vertexes.
      */
     protected void dump(int[][] mazeMatrix, Point startLocation, Point endLocation, List<Vertex> vertexes) {
+        // TODO: Remove.
+
         // Stupidly create a copy of the maze matrix, to ensure that
         // modification here don't interfere with the algorithm.
         int[][] copy = new int[mazeMatrix.length][mazeMatrix[0].length];

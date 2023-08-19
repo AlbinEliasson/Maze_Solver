@@ -511,9 +511,21 @@ public class MazeReader {
      * Internal method for finding the dimensions of each "block" of the maze.
      */
     private void findBlockSize() {
+        // TODO: Remove.
+        // Due to personal preference, the block size has been disables in favor
+        // of using cell-per-pixel, in order to better display the differences
+        // in algorithms.
+        if(true) {
+            // Override the block size to make all pixels blocks
+            this.blockWidth = 1;
+            this.blockHeight = 1;
+
+            return;
+        }
+
         // TODO: Calculate block size instead of using hard-coded value.
-        this.blockWidth = 19;
-        this.blockHeight = 19;
+        //this.blockWidth = 19;
+        //this.blockHeight = 19;
 
         int[] probeResults = new int[MazeReader.PROBE_FACTOR];
         int[] probeYs = IntStream.range(0, MazeReader.PROBE_FACTOR).map(x -> (imageHeight / (MazeReader.PROBE_FACTOR + 1)) * (x + 1)).toArray();
@@ -610,7 +622,8 @@ public class MazeReader {
                         //tmpDraw.add(new DrawInfo(actualX, actualY, 1, 1, new Color(0, 255, 0, 255)));
                     } else {
                         // 1 represents a normal "wall".
-                        this.mazeMatrix[x][y] = 1;
+                        //this.mazeMatrix[x][y] = 1;
+                        this.mazeMatrix[x][y] = 0;
                         tmpDraw.add(new DrawInfo(actualX - 1, actualY - 1, 3, 3, new Color(0, 0, 255, 255)));
                         //tmpDraw.add(new DrawInfo(actualX, actualY, 1, 1, new Color(0, 0, 255, 255)));
                     }

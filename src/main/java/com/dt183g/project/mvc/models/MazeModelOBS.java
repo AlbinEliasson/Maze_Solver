@@ -155,6 +155,7 @@ public class MazeModelOBS extends Model {
         }
 
         this.endLocation = location;
+
         this.pushUpdateEndLocationEvent(new Point(this.mazeReader.normalizeImageX(location.x), this.mazeReader.normalizeImageY(location.y)));
     }
 }

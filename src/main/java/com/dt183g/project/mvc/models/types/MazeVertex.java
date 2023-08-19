@@ -231,7 +231,7 @@ public class MazeVertex extends MazePoint implements Comparable<MazeVertex> {
      * @param end The end point/vertex to calculate against.
      */
     public void setDirectDistanceUsing(MazePoint end) {
-        this.directDistance = proximityTo(end);
+        this.setDirectDistance(proximityTo(end));
     }
 
     /**
@@ -251,7 +251,7 @@ public class MazeVertex extends MazePoint implements Comparable<MazeVertex> {
      */
     public void setPrevious(MazeVertex previous) {
         this.previous = previous;
-        this.distance = previous.getDistance();
+        this.distance = previous.getDistance() + 1;
     }
 
     /* ********************************************************************** */
@@ -266,7 +266,7 @@ public class MazeVertex extends MazePoint implements Comparable<MazeVertex> {
             case DirectDistanceOnly -> Double.compare(this.getDirectDistance(), other.getDirectDistance());
             case Combined -> Double.compare(
                     this.getDistance() + this.getDirectDistance(),
-                    other.getDistance() + this.getDirectDistance()
+                    other.getDistance() + other.getDirectDistance()
                 );
         };
     }
@@ -276,6 +276,6 @@ public class MazeVertex extends MazePoint implements Comparable<MazeVertex> {
      */
     @Override
     public String toString() {
-        return String.format("%s[x=%d,y=%d]", getClass().getSimpleName(), mazeX, mazeY);
+        return String.format("%s[x=%d,y=%d,d=%d,dd=%s,f=%s]", getClass().getSimpleName(), mazeX, mazeY, distance, directDistance, distance + directDistance);
     }
 }

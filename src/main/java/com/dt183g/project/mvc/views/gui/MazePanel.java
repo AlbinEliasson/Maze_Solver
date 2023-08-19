@@ -34,17 +34,17 @@ public class MazePanel extends JPanel {
             graphics.setColor(Color.BLUE);
             for(int i = 0; i < this.path.size() - 1; i++) {
                 MazePoint current = this.path.get(i);
-                MazePoint next = this.path.get(i + 1);
-                graphics.fillRect(current.getImageX(), current.getImageY(), next.getImageX() - current.getImageX() + 1, next.getImageY() - current.getImageY() + 1);
+
+                graphics.fillRect(current.getImageX(), current.getImageY(), 1, 1);
             }
         }
         if(this.startLocation != null) {
             graphics.setColor(Color.GREEN);
-            graphics.fillOval(this.startLocation.x - 5, this.startLocation.y - 5, 10, 10);
+            graphics.fillOval(this.startLocation.x - 6, this.startLocation.y - 6, 11, 11);
         }
         if(this.endLocation != null) {
             graphics.setColor(Color.RED);
-            graphics.fillOval(this.endLocation.x - 5, this.endLocation.y - 5, 10, 10);
+            graphics.fillOval(this.endLocation.x - 6, this.endLocation.y - 6, 11, 11);
         }
     }
 

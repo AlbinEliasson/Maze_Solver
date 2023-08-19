@@ -180,7 +180,7 @@ public class MazePoint {
      * @return The distance between the points.
      */
     public double proximityTo(MazePoint other) {
-        return Math.sqrt((mazeX - other.getX()) ^ 2 + (mazeY - other.getY()) ^ 2);
+        return Math.sqrt((mazeY - other.getY()) * (mazeY - other.getY()) + (mazeX - other.getX()) * (mazeX - other.getX()));
     }
 
     /**
