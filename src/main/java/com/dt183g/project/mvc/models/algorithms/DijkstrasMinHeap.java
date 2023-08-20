@@ -31,7 +31,7 @@ public class DijkstrasMinHeap extends MazeAlgorithm {
         for (int[] sub : distances)
             Arrays.fill(sub, Integer.MAX_VALUE);
 
-        List<MazePoint> path = null;
+        List<MazePoint> path;
         distances[start.getX()][start.getY()] = start.getDistance();
         vertexes.add(start);
 

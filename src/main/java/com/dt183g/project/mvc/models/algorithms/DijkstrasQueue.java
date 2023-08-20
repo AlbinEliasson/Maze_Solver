@@ -32,7 +32,7 @@ public class DijkstrasQueue extends MazeAlgorithm {
         for(int[] part : distances)
             Arrays.fill(part, Integer.MAX_VALUE);
 
-        List<MazePoint> path = null;
+        List<MazePoint> path;
         distances[start.getX()][start.getY()] = start.getDistance();
         vertexes.add(start);
 

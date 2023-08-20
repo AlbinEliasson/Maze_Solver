@@ -33,19 +33,6 @@ public class MazePoint {
     }
 
     /**
-     * Method for creating a new point using matrix coordinates.
-     *
-     * @param x The x coordinate.
-     * @param y The y coordinate.
-     * @param maze The backing maze.
-     *
-     * @return A new point.
-     */
-    public static MazePoint fromMaze(int x, int y, MazeReader maze) {
-        return new MazePoint(x, y, maze, false);
-    }
-
-    /**
      * Method for creating a new point using image coordinates.
      *
      * @param x The x coordinate.

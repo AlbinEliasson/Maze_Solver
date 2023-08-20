@@ -72,7 +72,6 @@ public class MazeView extends View {
             public void mousePressed(MouseEvent event) {
                 System.out.printf("[VIEW] Maze click event! X: %s Y: %s\n", event.getX(), event.getY());
                 pushSelectEvent(new Point(event.getX(), event.getY()));
-                // TODO: Handle solve button enable/disable
             }
         });
         this.windowPanel.add(this.mazePanel, BorderLayout.CENTER);

@@ -33,21 +33,18 @@ public class MazeModel extends Model {
      */
     @Override
     public void solve() {
-        // TODO: Validate algorithm, start/end locations.
-
         System.out.printf("[MODEL] Solving maze!\n\tAlgorithm: %s\n\tStart X: %s\n\tStart Y: %s\n\tEnd X: %s\n\tEnd Y: %s\n",
                 this.currentAlgorithm, this.startLocation.x, this.startLocation.y, this.endLocation.x, this.endLocation.y);
 
         List<MazePoint> path = this.currentAlgorithm.solver.solve(
                 this.mazeReader.getMazeMatrix(),
-                MazePoint.fromImage(startLocation.x, startLocation.y, mazeReader), // TODO: Dont do this, make it better.
-                MazePoint.fromImage(endLocation.x, endLocation.y, mazeReader)); // TODO: Dont do this, make it better.
+                MazePoint.fromImage(startLocation.x, startLocation.y, mazeReader),
+                MazePoint.fromImage(endLocation.x, endLocation.y, mazeReader));
 
         if(path != null) {
             this.pushSolveCompleteEvent(path);
         } else {
             System.out.print("[MODEL] UNABLE TO FIND PATH!\n");
-            // TODO: Handle solve failure
         }
     }
 
@@ -56,8 +53,12 @@ public class MazeModel extends Model {
      */
     @Override
     public void reset() {
-        System.out.print("[MODEL] RESET METHOD NOT IMPLEMENTED!\n");
-        // TODO: Reset any temporary stuff.
+        System.out.print("[MODEL] Resetting state!\n");
+
+        this.startLocation = null;
+        this.endLocation = null;
+        this.currentSelectState = SelectState.SetStart;
+        this.currentAlgorithm = Algorithm.values()[0];
     }
 
     /**
@@ -127,7 +128,6 @@ public class MazeModel extends Model {
         }
 
         this.startLocation = location;
-        // TODO: Maybe use MazePoint?
         this.pushUpdateStartLocationEvent(new Point(location.x, location.y));
     }
 

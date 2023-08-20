@@ -62,7 +62,7 @@ public class MazeController extends Controller {
     @Override
     public void handleViewSelectEvent(Point imageLocation) {
         System.out.printf("[CONTROLLER] %s handler triggered!\n", View.VIEW_SELECT_EVENT);
-        // TODO: Redo this because it is stupid.
+
         if(this.model.getSelectState() == MazeModel.SelectState.SetStart)
             this.model.setStartLocation(imageLocation);
         else

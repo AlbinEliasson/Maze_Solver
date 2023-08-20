@@ -2,7 +2,6 @@ package com.dt183g.project.mvc.models.algorithms;
 
 import com.dt183g.project.mvc.models.types.MazePoint;
 
-import java.awt.Point;
 import java.util.List;
 
 abstract public class MazeAlgorithm {

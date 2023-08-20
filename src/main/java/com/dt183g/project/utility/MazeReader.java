@@ -1,7 +1,5 @@
 package com.dt183g.project.utility;
 
-import com.dt183g.project.mvc.models.types.MazePoint;
-
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -86,7 +84,6 @@ public class MazeReader {
      * @return The maze matrix.
      */
     public int[][] getMazeMatrix() {
-        // TODO: Return copy of matrix instead.
         return this.mazeMatrix;
     }
 
@@ -98,7 +95,10 @@ public class MazeReader {
      * @return The value of the cell.
      */
     public int getCell(int x, int y) {
-        // TODO: Validate to make safe.
+        if(x < 0 || x > mazeWidth - 1 || y < 0 || y > mazeHeight - 1) {
+            throw new IndexOutOfBoundsException("Invalid cell coordinates provided!");
+        }
+
         return this.mazeMatrix[x][y];
     }
 
@@ -147,8 +147,6 @@ public class MazeReader {
      * @return Maze matrix X coordinate.
      */
     public int translateImageXToMatrixX(int imageX) {
-        // TODO: Optimize this.
-        //return ((imageX - this.offsetStartX) / (this.blockWidth + this.borderThickness)) * 2 + ((imageX - this.offsetStartX) % (this.blockWidth + this.borderThickness) == 0 ? 0 : 1);
         return (imageX - this.offsetStartX);
     }
 
@@ -161,8 +159,6 @@ public class MazeReader {
      * @return Maze matrix Y coordinate
      */
     public int translateImageYToMatrixY(int imageY) {
-        // TODO: Optimize this.
-        //return ((imageY - this.offsetStartY) / (this.blockHeight + this.borderThickness)) * 2 + ((imageY - this.offsetStartY) % (this.blockHeight + this.borderThickness) == 0 ? 0 : 1);
         return (imageY - this.offsetStartY);
     }
 
@@ -174,12 +170,7 @@ public class MazeReader {
      * @return Whether the location is inside a cell.
      */
     public boolean isValidImageX(int imageX) {
-        // TODO: Don't flipping do this, it is massively redundant since it
-        //       requires that the matrixX be calculated just to validate. Which
-        //       means that it will have to be done twice when actually
-        //       performing the "real" action later.
-        int matrixX = this.translateImageXToMatrixX(imageX);
-        return matrixX >= 0 && matrixX < this.mazeWidth - 1;
+        return imageX >= this.offsetStartX && imageX <= this.imageWidth - this.offsetEndX;
     }
 
     /**
@@ -190,12 +181,7 @@ public class MazeReader {
      * @return Whether the location is inside a cell.
      */
     public boolean isValidImageY(int imageY) {
-        // TODO: Don't flipping do this, it is massively redundant since it
-        //       requires that the matrixY be calculated just to validate. Which
-        //       means that it will have to be done twice when actually
-        //       performing the "real" action later.
-        int matrixY = this.translateImageYToMatrixY(imageY);
-        return matrixY >= 0 && matrixY < this.mazeHeight - 1;
+        return imageY >= this.offsetStartY && imageY <= this.imageHeight - this.offsetEndY;
     }
 
     /**
@@ -207,12 +193,6 @@ public class MazeReader {
      * @return Image X coordinate.
      */
     public int translateMatrixXToImageX(int matrixX) {
-        /*int base = this.offsetStartX + ((this.blockWidth + this.borderThickness) * (matrixX / 2));
-        return switch(direction) {
-            case West, NorthWest, SouthWest -> base + (matrixX % 2 == 0 ? 0 : this.borderThickness);
-            case Center, North, South -> base + (matrixX % 2 == 0 ? 0 : (this.blockWidth / 2) + this.borderThickness);
-            case East, NorthEast, SouthEast -> base + (matrixX % 2 == 0 ? 0 : this.blockWidth + this.borderThickness);
-        };*/
         return matrixX + this.offsetStartX;
     }
 
@@ -225,12 +205,6 @@ public class MazeReader {
      * @return Image Y coordinate.
      */
     public int translateMatrixYToImageY(int matrixY) {
-        /*int base = this.offsetStartY + ((this.blockHeight + this.borderThickness) * (matrixY / 2));
-        return switch(direction) {
-            case North, NorthEast, NorthWest -> base + (matrixY % 2 == 0 ? 0 : this.borderThickness);
-            case Center, East, West -> base + (matrixY % 2 == 0 ? 0 : (this.blockHeight / 2) + this.borderThickness);
-            case South, SouthEast, SouthWest -> base + (matrixY % 2 == 0 ? 0 : this.blockHeight + this.borderThickness);
-        };*/
         return matrixY + this.offsetStartY;
     }
 
@@ -239,10 +213,6 @@ public class MazeReader {
      * the start of the image and the edge of the maze in all four directions.
      */
     private void findOffsets() {
-        // TODO: Optimize this method to not require so many loops. At the very
-        //       least the loops can be cut down to two. Then there are also
-        //       many other optimizations which can be made.
-
         int[] probeResults = new int[MazeReader.PROBE_FACTOR];
         int[] probeYs = IntStream.range(0, MazeReader.PROBE_FACTOR).map(x -> (imageHeight / (MazeReader.PROBE_FACTOR + 1)) * (x + 1)).toArray();
         int[] probeXs = IntStream.range(0, MazeReader.PROBE_FACTOR).map(x -> (imageWidth / (MazeReader.PROBE_FACTOR + 1)) * (x + 1)).toArray();
@@ -309,7 +279,7 @@ public class MazeReader {
     }
 
     /**
-     * Internal method for checking if a RGB value corresponds to the color
+     * Internal method for checking if an RGB value corresponds to the color
      * expected for "border pixels" in the maze image.
      *
      * @param rgb Color to check.
@@ -317,9 +287,6 @@ public class MazeReader {
      * @return Whether the color is a "border color".
      */
     private boolean isBorderColor(int rgb) {
-        // TODO: Refactor this to not require the use of Color class and instead
-        //       use raw "int rgb" parameter data.
-        // TODO: Make the border color configurable.
         Color pixel = new Color(rgb);
         return pixel.getRed() < 32 && pixel.getGreen() < 32 && pixel.getBlue() < 32;
     }
@@ -333,9 +300,16 @@ public class MazeReader {
      * @param end The ending index (exclusive).
      *
      * @return Whether elements in (sub)array are all equal.
+     *
+     * @throws NullPointerException If array is null.
+     * @throws ArrayIndexOutOfBoundsException If start < 0 or end > array.length - 1.</>
      */
     private boolean isSubArrayEqual(int[] array, int start, int end) {
-        // TODO: Add invalid parameter protection.
+        if(array == null) {
+            throw new NullPointerException();
+        } else if(start < 0 || end > array.length - 1) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
 
         for(int i = start; i < end - 1; i ++) {
             if (array[i] != array[i + 1])
@@ -350,21 +324,6 @@ public class MazeReader {
      * image. The results are equivalent to the size of the backing maze matrix.
      */
     private void findMazeDimensions() {
-        // TODO: Don't assume start and end offsets are the same, and instead
-        //       calculate the end offsets separately and use that instead.
-        // NOTE: This makes an unsafe assumption that the offsets are the same
-        //       at the start AND end of the maze. The offsetX and offsetY are
-        //       only taken based on the 0 -> edge length, which means that the
-        //       offset on the other side could be something completely
-        //       different. If that is the case, it means that this formula
-        //       could return a faulty value. To fix this separate offsets for
-        //       the ends must be calculated and used instead.
-        //this.mazeWidth = ((this.imageWidth - this.offsetStartX - this.offsetEndX) / (this.blockWidth + this.borderThickness)) * 2 + 1;
-        //this.mazeHeight = ((this.imageHeight - this.offsetStartY - this.offsetEndY) / (this.blockHeight + this.borderThickness)) * 2 + 1;
-
-        //this.mazeSizeX = (26 * 2) + 1;
-        //this.mazeSizeY = (34 * 2) + 1;
-
         this.mazeWidth = this.imageWidth - this.offsetStartX - this.offsetEndX;
         this.mazeHeight = this.imageHeight - this.offsetStartY - this.offsetEndY;
     }
@@ -378,29 +337,12 @@ public class MazeReader {
 
         for(int y = 0; y < this.mazeHeight; y++) {
             for(int x = 0; x < this.mazeWidth; x++) {
-                // TODO: Move the coordinate translation functionality to
-                //       another internal helper method.
-                //int actualX = this.offsetStartX + (((this.blockWidth + 1) * (x / 2)) + (x % 2 == 0 ? 0 : (this.blockWidth / 2)));
-                //int actualY = this.offsetStartY + (((this.blockHeight + 1) * (y / 2)) + (y % 2 == 0 ? 0 : (this.blockHeight / 2)));
                 int actualX = this.translateMatrixXToImageX(x);
                 int actualY = this.translateMatrixYToImageY(y);
 
                 if(!this.isBorderColor(this.backingImage.getRGB(actualX, actualY))) {
-                    // TODO: Remove this hack. This sub if-statement is used to ensure that certain edges are detected
-                    //       correctly. Due to how the maze is rendered on the image, horizontal edges with an opening
-                    //       on the right are one pixel shorter than they should be. This results in the code not being
-                    //       able to detect the edge, thereby making the backing maze matrix incorrect. I have no idea
-                    //       how to solve this properly, but for now this method works. On each detected "free" space,
-                    //       it also checks the square to the left. If it is a wall, then the square is set to a wall,
-                    //       which negates the problem, for now.
-                    if(!this.isBorderColor(this.backingImage.getRGB(actualX - 1, actualY))) {
-                        // 0 represents an open cell.
-                        this.mazeMatrix[x][y] = 0;
-                    } else {
-                        // 1 represents a normal "wall".
-                        //this.mazeMatrix[x][y] = 1;
-                        this.mazeMatrix[x][y] = 0;
-                    }
+                    // 0 represents a normal "open cell".
+                    this.mazeMatrix[x][y] = 0;
                 } else {
                     // 1 represents a normal "wall".
                     this.mazeMatrix[x][y] = 1;

@@ -22,12 +22,13 @@ abstract public class Controller implements Observer {
      * @param data      Optional parameter data.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void handleEvent(String eventName, Object... data) {
         switch(eventName) {
-            case View.VIEW_SET_ALGORITHM_EVENT -> handleViewSetAlgorithmEvent((Model.Algorithm) data[0]); // TODO: Maybe validate type?
+            case View.VIEW_SET_ALGORITHM_EVENT -> handleViewSetAlgorithmEvent((Model.Algorithm) data[0]);
             case View.VIEW_SET_SELECT_STATE_START_EVENT -> handleViewSetSelectStateStartEvent();
             case View.VIEW_SET_SELECT_STATE_END_EVENT -> handleViewSetSelectStateEndEvent();
-            case View.VIEW_SELECT_EVENT -> handleViewSelectEvent((Point) data[0]);// TODO: Maybe validate type?
+            case View.VIEW_SELECT_EVENT -> handleViewSelectEvent((Point) data[0]);
             case View.VIEW_SOLVE_EVENT -> handleViewSolveEvent();
             case View.VIEW_RESET_EVENT -> handleViewResetEvent();
             case Model.MODEL_UPDATE_START_LOCATION_EVENT -> handleModelUpdateStartLocationEvent((Point) data[0]);
