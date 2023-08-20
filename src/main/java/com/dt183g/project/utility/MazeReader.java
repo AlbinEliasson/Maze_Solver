@@ -3,16 +3,10 @@ package com.dt183g.project.utility;
 import com.dt183g.project.mvc.models.types.MazePoint;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
@@ -23,23 +17,6 @@ import java.util.stream.IntStream;
  * @author Albin Eliasson & Martin K. Herkules
  */
 public class MazeReader {
-    // This is temporary.
-    private class DrawInfo {
-        public int x;
-        public int y;
-        public int h;
-        public int w;
-        public Color c;
-        public DrawInfo(int x, int y, int w, int h, Color c) {
-            this.x = x;
-            this.y = y;
-            this.w = w;
-            this.h = h;
-            this.c = c;
-        }
-    }
-    private List<DrawInfo> tmpDraw = new ArrayList<>();
-
     // How many points on each size of the maze to probe when attempting to find
     // the border thickness, offset and block size.
     private static final int PROBE_FACTOR = 8;
@@ -88,8 +65,6 @@ public class MazeReader {
         this.findBlockSize();
         this.findMazeDimensions();
         this.readMaze();
-
-        this.dump();
     }
 
     /**
@@ -170,28 +145,6 @@ public class MazeReader {
      */
     public int getImageHeight() {
         return this.imageHeight;
-    }
-
-    /**
-     * Method for getting a location in the maze as a MazePoint object.
-     *
-     * @param x The (matrix) x-coordinate.
-     * @param y The (matrix) y-coordinate.
-     * @return The MazePoint object.
-     */
-    public MazePoint pointFromMaze(int x, int y) {
-        return MazePoint.fromMaze(x, y, this);
-    }
-
-    /**
-     * Method for getting a location on the image as a MazePoint object.
-     *
-     * @param x The (image) x-coordinate.
-     * @param y The (image) y-coordinate.
-     * @return The MazePoint object.
-     */
-    public MazePoint pointFromImage(int x, int y) {
-        return MazePoint.fromImage(x, y, this);
     }
 
     /**
@@ -618,108 +571,15 @@ public class MazeReader {
                     if(!this.isBorderColor(this.backingImage.getRGB(actualX - 1, actualY))) {
                         // 0 represents an open cell.
                         this.mazeMatrix[x][y] = 0;
-                        tmpDraw.add(new DrawInfo(actualX - 1, actualY - 1, 3, 3, new Color(0, 255, 0, 255)));
-                        //tmpDraw.add(new DrawInfo(actualX, actualY, 1, 1, new Color(0, 255, 0, 255)));
                     } else {
                         // 1 represents a normal "wall".
                         //this.mazeMatrix[x][y] = 1;
                         this.mazeMatrix[x][y] = 0;
-                        tmpDraw.add(new DrawInfo(actualX - 1, actualY - 1, 3, 3, new Color(0, 0, 255, 255)));
-                        //tmpDraw.add(new DrawInfo(actualX, actualY, 1, 1, new Color(0, 0, 255, 255)));
                     }
                 } else {
                     // 1 represents a normal "wall".
                     this.mazeMatrix[x][y] = 1;
-                    tmpDraw.add(new DrawInfo(actualX - 1, actualY - 1, 3, 3, new Color(255, 0, 0, 255)));
-                    //tmpDraw.add(new DrawInfo(actualX, actualY, 1, 1, new Color(255, 0, 0, 255)));
                 }
-            }
-        }
-    }
-
-    /**
-     * Internal method for dumping the contents of the maze. It prints all the
-     * internal variables, and displays the maze image with any instructions
-     * contained in the tmpDraw list.
-     */
-    private void dump() {
-        System.out.printf("Dumping maze object: %s\n", this);
-
-        System.out.printf(
-                "\tImage size:\n\t\tHeight: %s\n\t\tWidth: %s\n",
-                this.imageHeight, this.imageWidth);
-
-        System.out.printf(
-                "\tOffsets:\n\t\tStarting X: %s\n\t\tEnding X: %s\n\t\tStarting Y: %s\n\t\tEnding Y: %s\n",
-                this.offsetStartX, this.offsetEndX, this.offsetStartY, this.offsetEndY);
-
-        System.out.printf("\tBorder:\n\t\tThickness: %s\n", this.borderThickness);
-
-        System.out.printf(
-                "\tBlock sizes:\n\t\tWidth: %s\n\t\tHeight: %s\n",
-                this.blockWidth, this.blockHeight);
-
-        System.out.printf(
-                "\tMaze size:\n\t\tX: %s\n\t\tY: %s\n",
-                this.mazeWidth, this.mazeHeight);
-
-        System.out.println("\tMaze matrix:");
-        if(mazeMatrix != null) {
-            for(int y = 0; y < this.mazeHeight; y++) {
-                System.out.print("\t\t");
-                for(int x = 0; x < this.mazeWidth; x++)
-                    System.out.print(this.mazeMatrix[x][y]);
-                System.out.println();
-            }
-        } else {
-            System.out.println("\t\tNULL");
-        }
-
-        /////////////////////////
-
-        JFrame frame = new JFrame();
-        JPanel panel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics graphics) {
-                super.paintComponent(graphics);
-
-                graphics.drawImage(backingImage, 0, 0, null);
-
-                tmpDraw.forEach(info -> {
-                    graphics.setColor(info.c);
-                    graphics.fillRect(info.x, info.y, info.w, info.h);
-                });
-            }
-        };
-
-        panel.setBackground(Color.BLACK);
-        panel.setPreferredSize(new Dimension(imageWidth, imageHeight));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(panel);
-        frame.getContentPane().setBackground(Color.BLACK);
-        frame.setVisible(true);
-        frame.pack();
-
-        /////////////////////////
-    }
-
-    /**
-     * Internal debug method for testing the coordinate translation methods. It
-     * paints over the entire maze using only the translation method, with the
-     * goal being complete coverage. All "free squares" should be painted red,
-     * and all borders should be painted red, if the methods are working
-     * correctly.
-     */
-    private void debugTryFullPaint() {
-        for(int y = 0; y < this.mazeHeight; y++) {
-            for(int x = 0; x < this.mazeWidth; x++) {
-                int actualX = this.translateMatrixXToImageX(x, Direction.NorthWest);
-                int actualY = this.translateMatrixYToImageY(y, Direction.NorthWest);
-                int width = this.translateMatrixXToImageX(x, Direction.SouthEast) - actualX + 1;
-                int height = this.translateMatrixYToImageY(y, Direction.SouthEast) - actualY + 1;
-                Color color = this.mazeMatrix[x][y] == 0 ? new Color(0, 255, 0, 255) : new Color(255, 0, 0, 255);
-                System.out.println(this.mazeMatrix[x][y]);
-                tmpDraw.add(new DrawInfo(actualX, actualY, width, height, color));
             }
         }
     }

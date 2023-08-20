@@ -1,229 +1,161 @@
 package com.dt183g.project.mvc.models;
 
-import com.dt183g.project.mvc.controllers.MazeController;
+import com.dt183g.project.mvc.models.types.MazePoint;
+import com.dt183g.project.utility.MazeReader;
 
 import java.awt.Point;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.awt.image.BufferedImage;
+import java.util.List;
 
-public class MazeModel {
-    private final MazeController mazeController;
-    private boolean pathFound = false;
+/**
+ * Class implementing the main model for the application.
+ *
+ * @author Albin Eliasson & Martin K. Herkules
+ */
+public class MazeModel extends Model {
+    private final MazeReader mazeReader;
 
-    public MazeModel(MazeController controller) {
-        this.mazeController = controller;
+    private Algorithm currentAlgorithm;
+    private SelectState currentSelectState;
+    private Point startLocation;
+    private Point endLocation;
+
+    public MazeModel(BufferedImage mazeImage) {
+        System.out.print("[MODEL] Initializing!\n");
+
+        this.mazeReader = new MazeReader(mazeImage);
+        this.currentSelectState = SelectState.SetStart;
+        this.currentAlgorithm = Algorithm.values()[0];
     }
 
-    public void solveMaze(Point startPosition, Point endPosition, int[][] maze, String algorithm) {
-        switch (algorithm) {
-            case "Dijkstras algorithm queue" -> dijkstrasAlgorithmQueue(maze, new Vertex(
-                    startPosition.x, startPosition.y), new Vertex(endPosition.x, endPosition.y));
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void solve() {
+        // TODO: Validate algorithm, start/end locations.
 
-            case "Dijkstras algorithm minHeap" -> dijkstrasAlgorithmMinHeap(
-                    maze, new Vertex(startPosition.x, startPosition.y), new Vertex(endPosition.x, endPosition.y));
+        System.out.printf("[MODEL] Solving maze!\n\tAlgorithm: %s\n\tStart X: %s\n\tStart Y: %s\n\tEnd X: %s\n\tEnd Y: %s\n",
+                this.currentAlgorithm, this.startLocation.x, this.startLocation.y, this.endLocation.x, this.endLocation.y);
 
-            case "A* algorithm" -> aStarAlgorithm(maze, new Vertex(
-                    startPosition.x, startPosition.y), new Vertex(endPosition.x, endPosition.y));
-        }
-    }
+        List<MazePoint> path = this.currentAlgorithm.solver.solve(
+                this.mazeReader.getMazeMatrix(),
+                MazePoint.fromImage(startLocation.x, startLocation.y, mazeReader), // TODO: Dont do this, make it better.
+                MazePoint.fromImage(endLocation.x, endLocation.y, mazeReader)); // TODO: Dont do this, make it better.
 
-    public void dijkstrasAlgorithmQueue(int[][] maze, Vertex startPosition, Vertex endPosition) {
-        // TODO make algorithm more efficient!
-        Queue<Vertex> vertexQueue = new LinkedList<>();
-        int[][] mazePathDistance = new int[maze.length][maze[0].length];
-
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[0].length; j++) {
-                mazePathDistance[i][j] = Integer.MAX_VALUE;
-            }
-        }
-
-        startPosition.setDistance(0);
-
-        mazePathDistance[startPosition.getYCoordinate()][startPosition.getXCoordinate()] = 0;
-        vertexQueue.add(startPosition);
-
-        int[] possibleDirectionX = {-1, 0, 1, 0};
-        int[] possibleDirectionY = {0, 1, 0, -1};
-
-        while (!vertexQueue.isEmpty()) {
-            Vertex nextVertex = vertexQueue.remove();
-            for(int i = 0; i < 4; i++) {
-                int newX = nextVertex.getXCoordinate() + possibleDirectionX[i];
-                int newY = nextVertex.getYCoordinate() + possibleDirectionY[i];
-
-                if (newX >= 0 && newX < maze[0].length && newY >= 0 && newY < maze.length && maze[newY][newX] == 1
-                        && nextVertex.getDistance() + 1 < mazePathDistance[newY][newX]) {
-
-                    mazePathDistance[newY][newX] = 1 + nextVertex.getDistance();
-
-                    if (newX == endPosition.getXCoordinate() && newY == endPosition.getYCoordinate()) {
-                        pathFound = true;
-                        System.out.format("Current X: %d Y: %d%n", newX, newY);
-                        System.out.format("Destination X: %d Y: %d%n", endPosition.getXCoordinate(), endPosition.getYCoordinate());
-
-                        Vertex endVertex = new Vertex(newX, newY);
-                        endVertex.setDistance(nextVertex.getDistance() + 1);
-                        endVertex.setPrevious(nextVertex);
-
-                        while (endVertex != null) {
-                            System.out.format("X: %d Y: %d distance: %d%n", endVertex.getXCoordinate(), endVertex.getYCoordinate(), endVertex.getDistance());
-                            displayPath(new Point(endVertex.getXCoordinate(), endVertex.getYCoordinate()));
-                            endVertex = endVertex.getPrevious();
-                        }
-                        System.out.println("Final distance: " + (nextVertex.getDistance() + 1));
-                        break;
-                    }
-                    Vertex newVertex = new Vertex(newX, newY);
-                    newVertex.setDistance(nextVertex.getDistance() + 1);
-                    newVertex.setPrevious(nextVertex);
-
-                    vertexQueue.add(newVertex);
-                }
-            }
-        }
-        if (!pathFound) {
-            System.out.println("End not found!");
+        if(path != null) {
+            this.pushSolveCompleteEvent(path);
+        } else {
+            System.out.print("[MODEL] UNABLE TO FIND PATH!\n");
+            // TODO: Handle solve failure
         }
     }
 
-    public void dijkstrasAlgorithmMinHeap(int[][] maze, Vertex startPosition, Vertex endPosition) {
-        // TODO make algorithm more efficient!
-        PriorityQueue<Vertex> vertexQueue = new PriorityQueue<>();
-        int[][] mazePathDistance = new int[maze.length][maze[0].length];
-
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[0].length; j++) {
-                mazePathDistance[i][j] = Integer.MAX_VALUE;
-            }
-        }
-        startPosition.setDistance(0);
-        startPosition.setCompareDistance(true);
-
-        mazePathDistance[startPosition.getYCoordinate()][startPosition.getXCoordinate()] = startPosition.getDistance();
-        vertexQueue.add(startPosition);
-
-        int[] possibleDirectionX = {-1, 0, 1, 0};
-        int[] possibleDirectionY = {0, 1, 0, -1};
-
-        while (!vertexQueue.isEmpty()) {
-            Vertex nextVertex = vertexQueue.remove();
-            for(int i = 0; i < 4; i++) {
-                int newX = nextVertex.getXCoordinate() + possibleDirectionX[i];
-                int newY = nextVertex.getYCoordinate() + possibleDirectionY[i];
-
-                if (newX >= 0 && newX < maze[0].length && newY >= 0 && newY < maze.length && maze[newY][newX] == 1
-                        && nextVertex.getDistance() + 1 < mazePathDistance[newY][newX]) {
-
-                    mazePathDistance[newY][newX] = 1 + nextVertex.getDistance();
-
-                    if (newX == endPosition.getXCoordinate() && newY == endPosition.getYCoordinate()) {
-                        pathFound = true;
-                        System.out.format("Current X: %d Y: %d%n", newX, newY);
-                        System.out.format("Destination X: %d Y: %d%n", endPosition.getXCoordinate(), endPosition.getYCoordinate());
-
-                        Vertex endVertex = new Vertex(newX, newY);
-                        endVertex.setDistance(nextVertex.getDistance() + 1);
-                        endVertex.setCompareDistance(true);
-                        endVertex.setPrevious(nextVertex);
-
-                        while (endVertex != null) {
-                            System.out.format("X: %d Y: %d distance: %d%n", endVertex.getXCoordinate(), endVertex.getYCoordinate(), endVertex.getDistance());
-                            displayPath(new Point(endVertex.getXCoordinate(), endVertex.getYCoordinate()));
-                            endVertex = endVertex.getPrevious();
-                        }
-                        System.out.println("Final distance: " + (nextVertex.getDistance() + 1));
-                        break;
-                    }
-                    Vertex newVertex = new Vertex(newX, newY);
-                    newVertex.setDistance(nextVertex.getDistance() + 1);
-                    newVertex.setCompareDistance(true);
-                    newVertex.setPrevious(nextVertex);
-                    vertexQueue.add(newVertex);
-                }
-            }
-        }
-        if (!pathFound) {
-            System.out.println("End not found!");
-        }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void reset() {
+        System.out.print("[MODEL] RESET METHOD NOT IMPLEMENTED!\n");
+        // TODO: Reset any temporary stuff.
     }
 
-    public void aStarAlgorithm(int[][] maze, Vertex startPosition, Vertex endPosition) {
-        // TODO make algorithm more efficient!
-        PriorityQueue<Vertex> vertexQueue = new PriorityQueue<>();
-
-        int[][] mazePathDistance = new int[maze.length][maze[0].length];
-
-        for (int i = 0; i < maze.length; i++) {
-            for (int j = 0; j < maze[0].length; j++) {
-                mazePathDistance[i][j] = Integer.MAX_VALUE;
-            }
-        }
-        startPosition.setDistance(0);
-        startPosition.setF(startPosition.getDistance() + heuristic(
-                startPosition.getXCoordinate(), startPosition.getYCoordinate(),
-                endPosition.getXCoordinate(), endPosition.getYCoordinate()));
-
-        mazePathDistance[startPosition.getXCoordinate()][startPosition.getYCoordinate()] = startPosition.getDistance();
-
-        vertexQueue.add(startPosition);
-
-        int[] possibleDirectionX = {-1, 0, 1, 0};
-        int[] possibleDirectionY = {0, 1, 0, -1};
-
-        while (!vertexQueue.isEmpty()) {
-            Vertex nextVertex = vertexQueue.remove();
-
-            for(int i = 0; i < 4; i++) {
-                int newX = nextVertex.getXCoordinate() + possibleDirectionX[i];
-                int newY = nextVertex.getYCoordinate() + possibleDirectionY[i];
-
-                if (newX >= 0 && newX < maze[0].length && newY >= 0 && newY < maze.length && maze[newY][newX] == 1
-                        && nextVertex.getDistance() + 1 < mazePathDistance[newY][newX]) {
-
-                    mazePathDistance[newY][newX] = nextVertex.getDistance() + 1;
-
-                    if (newX == endPosition.getXCoordinate() && newY == endPosition.getYCoordinate()) {
-                        pathFound = true;
-                        Vertex vertexEndPosition = new Vertex(newX, newY);
-                        vertexEndPosition.setDistance(nextVertex.getDistance() + 1);
-                        vertexEndPosition.setPrevious(nextVertex);
-
-                        while (vertexEndPosition != null) {
-                            System.out.format("X: %d Y: %d distance: %d%n", vertexEndPosition.getXCoordinate(), vertexEndPosition.getYCoordinate(), vertexEndPosition.getDistance());
-                            displayPath(new Point(vertexEndPosition.getXCoordinate(), vertexEndPosition.getYCoordinate()));
-                            vertexEndPosition = vertexEndPosition.getPrevious();
-                        }
-
-                        System.out.println("Final distance: " + (nextVertex.getDistance() + 1));
-                        break;
-                    }
-
-                    Vertex newVertex = new Vertex(newX, newY);
-
-                    newVertex.setDistance(nextVertex.getDistance() + 1);
-                    newVertex.setF(newVertex.getDistance() + heuristic(newX, newY, endPosition.getXCoordinate(), endPosition.getYCoordinate()));
-                    newVertex.setPrevious(nextVertex);
-
-                    vertexQueue.add(newVertex);
-                }
-            }
-        }
-        if (!pathFound) {
-            System.out.println("End not found!");
-        }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public BufferedImage getMazeImage() {
+        return mazeReader.getBackingImage();
     }
 
-    private static double heuristic(int newX, int newY, int endX, int endY) {
-        return Math.sqrt((newY - endY) * (newY - endY) + (newX - endX) * (newX - endX));
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Algorithm getAlgorithm() {
+        return this.currentAlgorithm;
     }
 
-    private void displayPath(Point position) {
-        mazeController.displayPath(position);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAlgorithm(Algorithm algorithm) {
+        System.out.printf("[MODEL] Setting algorithm! Algorithm: %s\n", algorithm);
+        this.currentAlgorithm = algorithm;
     }
 
-    public void resetMaze() {
-        pathFound = false;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SelectState getSelectState() {
+        return this.currentSelectState;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSelectState(SelectState state) {
+        System.out.printf("[MODEL] Setting select state! State: %s\n", state);
+        this.currentSelectState = state;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Point getStartLocation() {
+        return this.startLocation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setStartLocation(Point location) {
+        System.out.printf("[MODEL] Setting start location! X: %s Y: %s\n", location.x, location.y);
+
+        if(
+                !this.mazeReader.isValidImageX(location.x) ||
+                !this.mazeReader.isValidImageY(location.y) ||
+                this.mazeReader.getCell(this.mazeReader.translateImageXToMatrixX(location.x), this.mazeReader.translateImageYToMatrixY(location.y)) != 0
+        ) {
+            System.out.printf("[MODEL] Invalid start location provided, skipping! X: %s Y: %s\n", location.x, location.y);
+            return;
+        }
+
+        this.startLocation = location;
+        this.pushUpdateStartLocationEvent(new Point(this.mazeReader.normalizeImageX(location.x), this.mazeReader.normalizeImageY(location.y)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Point getEndLocation() {
+        return this.endLocation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setEndLocation(Point location) {
+        System.out.printf("[MODEL] Setting end location! X: %s Y: %s\n", location.x, location.y);
+
+        if(
+                !this.mazeReader.isValidImageX(location.x) ||
+                !this.mazeReader.isValidImageY(location.y) ||
+                this.mazeReader.getCell(this.mazeReader.translateImageXToMatrixX(location.x), this.mazeReader.translateImageYToMatrixY(location.y)) != 0
+        ) {
+            System.out.printf("[MODEL] Invalid end location provided, skipping! X: %s Y: %s\n", location.x, location.y);
+            return;
+        }
+
+        this.endLocation = location;
+
+        this.pushUpdateEndLocationEvent(new Point(this.mazeReader.normalizeImageX(location.x), this.mazeReader.normalizeImageY(location.y)));
     }
 }
