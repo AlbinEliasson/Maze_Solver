@@ -35,13 +35,6 @@ public class MazeReader {
     private int offsetStartY;
     private int offsetEndY;
 
-    // The border thickness is the size of the walls between cells in the maze.
-    private int borderThickness;
-
-    // A "block" is the size of a single cell in the image.
-    private int blockWidth;
-    private int blockHeight;
-
     // The maze size is the size of the maze matrix representation.
     private int mazeWidth;
     private int mazeHeight;
@@ -61,8 +54,6 @@ public class MazeReader {
         this.imageWidth = this.backingImage.getWidth();
 
         this.findOffsets();
-        this.findBorderSize();
-        this.findBlockSize();
         this.findMazeDimensions();
         this.readMaze();
     }
@@ -148,13 +139,6 @@ public class MazeReader {
     }
 
     /**
-     * A direction.
-     */
-    public enum Direction {
-        North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest, Center
-    }
-
-    /**
      * Method for translating an X coordinate on the backing image to a
      * corresponding X coordinate in the maze matrix.
      *
@@ -164,7 +148,8 @@ public class MazeReader {
      */
     public int translateImageXToMatrixX(int imageX) {
         // TODO: Optimize this.
-        return ((imageX - this.offsetStartX) / (this.blockWidth + this.borderThickness)) * 2 + ((imageX - this.offsetStartX) % (this.blockWidth + this.borderThickness) == 0 ? 0 : 1);
+        //return ((imageX - this.offsetStartX) / (this.blockWidth + this.borderThickness)) * 2 + ((imageX - this.offsetStartX) % (this.blockWidth + this.borderThickness) == 0 ? 0 : 1);
+        return (imageX - this.offsetStartX);
     }
 
     /**
@@ -177,53 +162,8 @@ public class MazeReader {
      */
     public int translateImageYToMatrixY(int imageY) {
         // TODO: Optimize this.
-        return ((imageY - this.offsetStartY) / (this.blockHeight + this.borderThickness)) * 2 + ((imageY - this.offsetStartY) % (this.blockHeight + this.borderThickness) == 0 ? 0 : 1);
-    }
-
-    /**
-     * Method for normalizing a (image) x-coordinate to a specific directing in
-     * the closest cell.
-     *
-     * @param imageX The (image) x-coordinate.
-     * @param direction The section of the cell to normalize to.
-     * @return The normalized x-coordinate.
-     */
-    public int normalizeImageX(int imageX, Direction direction) {
-        // TODO: Maybe redo this, it feels inefficient.
-        return this.translateMatrixXToImageX(this.translateImageXToMatrixX(imageX), direction);
-    }
-
-    /**
-     * Method for normalizing a (image) x-coordinate to the closest cell.
-     *
-     * @param imageX The (image) x-coordinate.
-     * @return The normalized x-coordinate.
-     */
-    public int normalizeImageX(int imageX) {
-        return this.normalizeImageX(imageX, Direction.Center);
-    }
-
-    /**
-     * Method for normalizing a (image) y-coordinate to a specific directing in
-     * the closest cell.
-     *
-     * @param imageY The (image) y-coordinate.
-     * @param direction The section of the cell to normalize to.
-     * @return The normalized y-coordinate.
-     */
-    public int normalizeImageY(int imageY, Direction direction) {
-        // TODO: Maybe redo this, it feels inefficient.
-        return this.translateMatrixYToImageY(this.translateImageYToMatrixY(imageY), direction);
-    }
-
-    /**
-     * Method for normalizing a (image) y-coordinate to the closest cell.
-     *
-     * @param imageY The (image) y-coordinate.
-     * @return The normalized y-coordinate.
-     */
-    public int normalizeImageY(int imageY) {
-        return this.normalizeImageY(imageY, Direction.Center);
+        //return ((imageY - this.offsetStartY) / (this.blockHeight + this.borderThickness)) * 2 + ((imageY - this.offsetStartY) % (this.blockHeight + this.borderThickness) == 0 ? 0 : 1);
+        return (imageY - this.offsetStartY);
     }
 
     /**
@@ -263,47 +203,17 @@ public class MazeReader {
      * corresponding X coordinate on the backing image.
      *
      * @param matrixX Maze matrix X coordinate.
-     * @param direction Section of cell on image to point to.
-     *
-     * @return Image X coordinate.
-     */
-    public int translateMatrixXToImageX(int matrixX, Direction direction) {
-        int base = this.offsetStartX + ((this.blockWidth + this.borderThickness) * (matrixX / 2));
-        return switch(direction) {
-            case West, NorthWest, SouthWest -> base + (matrixX % 2 == 0 ? 0 : this.borderThickness);
-            case Center, North, South -> base + (matrixX % 2 == 0 ? 0 : (this.blockWidth / 2) + this.borderThickness);
-            case East, NorthEast, SouthEast -> base + (matrixX % 2 == 0 ? 0 : this.blockWidth + this.borderThickness);
-        };
-    }
-
-    /**
-     * Method for translating an X coordinate in the maze matrix to a
-     * corresponding X coordinate on the backing image.
-     *
-     * @param matrixX Maze matrix X coordinate.
      *
      * @return Image X coordinate.
      */
     public int translateMatrixXToImageX(int matrixX) {
-        return this.translateMatrixXToImageX(matrixX, Direction.Center);
-    }
-
-    /**
-     * Method for translating a Y coordinate in the maze matrix to a
-     * corresponding Y coordinate on the backing image.
-     *
-     * @param matrixY Maze matrix Y coordinate.
-     * @param direction Section of cell on image to point to.
-     *
-     * @return Image Y coordinate.
-     */
-    public int translateMatrixYToImageY(int matrixY, Direction direction) {
-        int base = this.offsetStartY + ((this.blockHeight + this.borderThickness) * (matrixY / 2));
+        /*int base = this.offsetStartX + ((this.blockWidth + this.borderThickness) * (matrixX / 2));
         return switch(direction) {
-            case North, NorthEast, NorthWest -> base + (matrixY % 2 == 0 ? 0 : this.borderThickness);
-            case Center, East, West -> base + (matrixY % 2 == 0 ? 0 : (this.blockHeight / 2) + this.borderThickness);
-            case South, SouthEast, SouthWest -> base + (matrixY % 2 == 0 ? 0 : this.blockHeight + this.borderThickness);
-        };
+            case West, NorthWest, SouthWest -> base + (matrixX % 2 == 0 ? 0 : this.borderThickness);
+            case Center, North, South -> base + (matrixX % 2 == 0 ? 0 : (this.blockWidth / 2) + this.borderThickness);
+            case East, NorthEast, SouthEast -> base + (matrixX % 2 == 0 ? 0 : this.blockWidth + this.borderThickness);
+        };*/
+        return matrixX + this.offsetStartX;
     }
 
     /**
@@ -315,7 +225,13 @@ public class MazeReader {
      * @return Image Y coordinate.
      */
     public int translateMatrixYToImageY(int matrixY) {
-        return this.translateMatrixYToImageY(matrixY, Direction.Center);
+        /*int base = this.offsetStartY + ((this.blockHeight + this.borderThickness) * (matrixY / 2));
+        return switch(direction) {
+            case North, NorthEast, NorthWest -> base + (matrixY % 2 == 0 ? 0 : this.borderThickness);
+            case Center, East, West -> base + (matrixY % 2 == 0 ? 0 : (this.blockHeight / 2) + this.borderThickness);
+            case South, SouthEast, SouthWest -> base + (matrixY % 2 == 0 ? 0 : this.blockHeight + this.borderThickness);
+        };*/
+        return matrixY + this.offsetStartY;
     }
 
     /**
@@ -430,100 +346,6 @@ public class MazeReader {
     }
 
     /**
-     * Internal method for finding the thickness of the borders in the maze
-     * image.
-     */
-    private void findBorderSize() {
-        // TODO: Possibly also check for the border thickness in the Y direction
-        //       as it may be different. It is not in the maze images used
-        //       normally and therefore this is low priority.
-
-        int[] probeResults = new int[MazeReader.PROBE_FACTOR];
-        int[] probeYs = IntStream.range(0, MazeReader.PROBE_FACTOR).map(x -> (imageHeight / (MazeReader.PROBE_FACTOR + 1)) * (x + 1)).toArray();
-
-        for(int yi = 0; yi < probeYs.length; yi++) {
-            int y = probeYs[yi];
-            int counter = 0;
-            for(int x = this.offsetStartX; x < this.imageWidth; x++) {
-                if(this.isBorderColor(this.backingImage.getRGB(x, y))) {
-                    counter++;
-                } else if(counter > 0) {
-                    //tmpDraw.add(new DrawInfo(this.offsetStartX, y, x - this.offsetStartX, 1, Color.MAGENTA));
-                    probeResults[yi] = counter;
-                    break;
-                }
-            }
-        }
-        Arrays.sort(probeResults);
-        if(!this.isSubArrayEqual(probeResults, probeResults.length / 2 - 1, probeResults.length / 2 + 1 + probeResults.length % 2))
-            throw new RuntimeException("Unable to find maze image border thickness!");
-        this.borderThickness = probeResults[probeResults.length / 2];
-    }
-
-    /**
-     * Internal method for finding the dimensions of each "block" of the maze.
-     */
-    private void findBlockSize() {
-        // TODO: Remove.
-        // Due to personal preference, the block size has been disables in favor
-        // of using cell-per-pixel, in order to better display the differences
-        // in algorithms.
-        if(true) {
-            // Override the block size to make all pixels blocks
-            this.blockWidth = 1;
-            this.blockHeight = 1;
-
-            return;
-        }
-
-        // TODO: Calculate block size instead of using hard-coded value.
-        //this.blockWidth = 19;
-        //this.blockHeight = 19;
-
-        int[] probeResults = new int[MazeReader.PROBE_FACTOR];
-        int[] probeYs = IntStream.range(0, MazeReader.PROBE_FACTOR).map(x -> (imageHeight / (MazeReader.PROBE_FACTOR + 1)) * (x + 1)).toArray();
-        int[] probeXs = IntStream.range(0, MazeReader.PROBE_FACTOR).map(x -> (imageWidth / (MazeReader.PROBE_FACTOR + 1)) * (x + 1)).toArray();
-
-        // STEP 1: Find block width
-        for(int yi = 0; yi < probeYs.length; yi++) {
-            int y = probeYs[yi];
-            int counter = 0;
-            for(int x = this.offsetStartX + this.borderThickness; x < this.imageWidth; x++) {
-                if(!this.isBorderColor(this.backingImage.getRGB(x, y))) {
-                    counter++;
-                } else if(counter > 0) {
-                    //tmpDraw.add(new DrawInfo(this.offsetStartX + this.borderThickness, y, x - this.offsetStartX - this.borderThickness, 1, Color.MAGENTA));
-                    probeResults[yi] = counter;
-                    break;
-                }
-            }
-        }
-        Arrays.sort(probeResults);
-        if(!this.isSubArrayEqual(probeResults, probeResults.length / 2 - 1, probeResults.length / 2 + 1 + probeResults.length % 2))
-            throw new RuntimeException("Unable to find maze image block width!");
-        this.blockWidth = probeResults[probeResults.length / 2];
-
-        // STEP 2: Find block height
-        for(int xi = 0; xi < probeXs.length; xi++) {
-            int x = probeXs[xi];
-            int counter = 0;
-            for(int y = this.offsetStartY + this.borderThickness; y < this.imageHeight; y++) {
-                if(!this.isBorderColor(this.backingImage.getRGB(x, y))) {
-                    counter++;
-                } else if(counter > 0) {
-                    //tmpDraw.add(new DrawInfo(x, this.offsetStartY + this.borderThickness, 1, y - this.offsetStartY - this.borderThickness, Color.MAGENTA));
-                    probeResults[xi] = counter;
-                    break;
-                }
-            }
-        }
-        Arrays.sort(probeResults);
-        if(!this.isSubArrayEqual(probeResults, probeResults.length / 2 - 1, probeResults.length / 2 + 1 + probeResults.length % 2))
-            throw new RuntimeException("Unable to find maze image block height!");
-        this.blockHeight = probeResults[probeResults.length / 2];
-    }
-
-    /**
      * Internal method for finding the actual "block" dimensions of the maze
      * image. The results are equivalent to the size of the backing maze matrix.
      */
@@ -537,11 +359,14 @@ public class MazeReader {
         //       different. If that is the case, it means that this formula
         //       could return a faulty value. To fix this separate offsets for
         //       the ends must be calculated and used instead.
-        this.mazeWidth = ((this.imageWidth - this.offsetStartX - this.offsetEndX) / (this.blockWidth + this.borderThickness)) * 2 + 1;
-        this.mazeHeight = ((this.imageHeight - this.offsetStartY - this.offsetEndY) / (this.blockHeight + this.borderThickness)) * 2 + 1;
+        //this.mazeWidth = ((this.imageWidth - this.offsetStartX - this.offsetEndX) / (this.blockWidth + this.borderThickness)) * 2 + 1;
+        //this.mazeHeight = ((this.imageHeight - this.offsetStartY - this.offsetEndY) / (this.blockHeight + this.borderThickness)) * 2 + 1;
 
         //this.mazeSizeX = (26 * 2) + 1;
         //this.mazeSizeY = (34 * 2) + 1;
+
+        this.mazeWidth = this.imageWidth - this.offsetStartX - this.offsetEndX;
+        this.mazeHeight = this.imageHeight - this.offsetStartY - this.offsetEndY;
     }
 
     /**
@@ -557,8 +382,8 @@ public class MazeReader {
                 //       another internal helper method.
                 //int actualX = this.offsetStartX + (((this.blockWidth + 1) * (x / 2)) + (x % 2 == 0 ? 0 : (this.blockWidth / 2)));
                 //int actualY = this.offsetStartY + (((this.blockHeight + 1) * (y / 2)) + (y % 2 == 0 ? 0 : (this.blockHeight / 2)));
-                int actualX = this.translateMatrixXToImageX(x, Direction.Center);
-                int actualY = this.translateMatrixYToImageY(y, Direction.Center);
+                int actualX = this.translateMatrixXToImageX(x);
+                int actualY = this.translateMatrixYToImageY(y);
 
                 if(!this.isBorderColor(this.backingImage.getRGB(actualX, actualY))) {
                     // TODO: Remove this hack. This sub if-statement is used to ensure that certain edges are detected

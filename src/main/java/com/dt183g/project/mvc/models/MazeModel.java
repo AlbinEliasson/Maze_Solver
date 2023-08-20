@@ -127,7 +127,8 @@ public class MazeModel extends Model {
         }
 
         this.startLocation = location;
-        this.pushUpdateStartLocationEvent(new Point(this.mazeReader.normalizeImageX(location.x), this.mazeReader.normalizeImageY(location.y)));
+        // TODO: Maybe use MazePoint?
+        this.pushUpdateStartLocationEvent(new Point(location.x, location.y));
     }
 
     /**
@@ -156,6 +157,6 @@ public class MazeModel extends Model {
 
         this.endLocation = location;
 
-        this.pushUpdateEndLocationEvent(new Point(this.mazeReader.normalizeImageX(location.x), this.mazeReader.normalizeImageY(location.y)));
+        this.pushUpdateEndLocationEvent(new Point(location.x, location.y));
     }
 }

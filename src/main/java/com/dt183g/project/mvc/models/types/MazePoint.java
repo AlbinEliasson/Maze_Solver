@@ -82,18 +82,6 @@ public class MazePoint {
     /**
      * Method for getting the point's x coordinate for the maze image.
      *
-     * @param direction The section of the cell on the image to point coordinate
-     *                  to.
-     *
-     * @return The image x coordinate.
-     */
-    public int getImageX(MazeReader.Direction direction) {
-        return maze.translateMatrixXToImageX(this.mazeX, direction);
-    }
-
-    /**
-     * Method for getting the point's x coordinate for the maze image.
-     *
      * @return The image x coordinate.
      */
     public int getImageX() {
@@ -131,18 +119,6 @@ public class MazePoint {
             throw new IndexOutOfBoundsException(String.format("Attempted to set maze Y to %s, allowed range 0 - %s.", y, maze.getMatrixHeight() - 1));
 
         this.mazeY = y;
-    }
-
-    /**
-     * Method for getting the point's y coordinate for the maze image.
-     *
-     * @param direction The section of the cell on the image to point coordinate
-     *                  to.
-     *
-     * @return The image y coordinate.
-     */
-    public int getImageY(MazeReader.Direction direction) {
-        return maze.translateMatrixYToImageY(this.mazeY, direction);
     }
 
     /**
