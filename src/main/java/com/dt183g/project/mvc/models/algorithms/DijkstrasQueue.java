@@ -53,7 +53,7 @@ public class DijkstrasQueue extends MazeAlgorithm {
                         distances[current.getX()][current.getY()] + 1 < distances[x][y]
                 ) {
                     MazeVertex next = current.makeNext(x, y);
-                    distances[x][y] = distances[current.getX()][current.getY()] + 1;
+                    distances[x][y] = next.getDistance();
 
                     if(x == end.getX() && y == end.getY()) {
                         path = new ArrayList<>();
