@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 public class MazeReader {
     // How many points on each size of the maze to probe when attempting to find
     // the border thickness, offset and block size.
-    private static final int PROBE_FACTOR = 8;
+    private static final int PROBE_FACTOR = 16;
 
     // The backing maze image
     private final BufferedImage backingImage;
@@ -170,7 +170,7 @@ public class MazeReader {
      * @return Whether the location is inside a cell.
      */
     public boolean isValidImageX(int imageX) {
-        return imageX >= this.offsetStartX && imageX <= this.imageWidth - this.offsetEndX;
+        return imageX >= this.offsetStartX && imageX < this.imageWidth - this.offsetEndX;
     }
 
     /**
@@ -181,7 +181,7 @@ public class MazeReader {
      * @return Whether the location is inside a cell.
      */
     public boolean isValidImageY(int imageY) {
-        return imageY >= this.offsetStartY && imageY <= this.imageHeight - this.offsetEndY;
+        return imageY >= this.offsetStartY && imageY < this.imageHeight - this.offsetEndY;
     }
 
     /**

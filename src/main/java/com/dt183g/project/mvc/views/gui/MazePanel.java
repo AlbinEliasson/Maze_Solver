@@ -67,7 +67,6 @@ public class MazePanel extends JPanel {
         this.refresh();
     }
 
-
     public void reset() {
         this.startLocation = null;
         this.endLocation = null;
