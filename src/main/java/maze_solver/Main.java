@@ -1,6 +1,6 @@
-package com.dt183g.project;
+package maze_solver;
 
-import com.dt183g.project.mvc.controllers.MazeController;
+import maze_solver.mvc.controllers.MazeController;
 
 import javax.imageio.ImageIO;
 import javax.swing.SwingUtilities;
